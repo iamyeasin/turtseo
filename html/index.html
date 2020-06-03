@@ -95,7 +95,7 @@
 
 				Papa.parse(selectedFile, {
 				complete: function(results) {
-					console.log("Finished:", results.data);
+					console.log("Finished:", results.data, "Total:  ", results.data.length );
 				},
 			});
 			// readSingleFile();
