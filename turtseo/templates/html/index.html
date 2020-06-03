@@ -25,7 +25,7 @@
 		      <input type="text" class="form-control" id="linkid" value="">
 		    </div>
 		    <div class="form-group col-sm-4">
-			    <input type="file" class="form-control-file" id="exampleFormControlFile1">
+			    <input type="file" class="form-control-file" id="file">
 			</div>
 		  </div>
 			<hr>
@@ -82,4 +82,53 @@
 
 
 </body>
+{% block script %}
+	<script src="PapaParse/papaparse.min.js"></script>
+	<script>
+
+    $(document).ready(function(e){
+		// function readSingleFile(e) {
+		// 	console.log("display4: " );
+		// 	var file = document.getElementById('file').files[0];
+		// 	if (!file) {
+		// 		return;
+		// 	}
+		// 	var reader = new FileReader();
+		// 	console.log("display5: " );
+		// 	reader.onload = function(e) {
+		// 		var contents = e.target.result;
+		// 		//displayContents(contents);
+		// 		console.log("display 3: " + contents)
+		// 	};
+		// 	reader.readAsText(file);
+		// 	console.log("display6: " );
+		// }
+
+		
+
+		$("#save").click(function(e){
+            e.preventDefault();
+				console.log("display1");
+				let selectedFile = document.getElementById('file').files[0];
+
+				//let reader = new FileReader();
+				//let f = new File(selectedFile);
+				// console.log("shawwaa" + (typeof)selectedFile);
+
+				Papa.parse(selectedFile, {
+				complete: function(results) {
+					console.log("Finished:", results.data);
+				},
+			});
+			// readSingleFile();
+			
+			
+		
+		
+    	})
+    });
+
+  </script>
+{% endblock %}
+
 </html>
