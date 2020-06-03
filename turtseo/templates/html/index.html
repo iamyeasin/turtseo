@@ -19,7 +19,7 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
 		integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
 		crossorigin="anonymous"></script>
-	
+
 </head>
 
 <body>
@@ -97,18 +97,37 @@
 <script>
 
 	$(document).ready(function (e) {
-
 		$("#save").click(function (e) {
 			e.preventDefault();
 			//console.log("display1");
 			let selectedFile = document.getElementById('file').files[0];
 			Papa.parse(selectedFile, {
 				complete: function (results) {
+					var file = results.data;
+
+					var row_titles = JSON.stringify(file[0]);
+					console.log(row_titles);
+					console.log(row_titles.length);
+
 					console.log("Finished:", results.data, "Total:  ", results.data.length);
-				},
+				}
 			});
 			// readSingleFile();
-		})
+
+			$.ajax({
+				type: 'POST',
+				url: '',
+				data: {
+					sample : row_titles
+				},
+				success: function (gotIt, status) {
+					alert("Data Passed");
+				},
+				error: function () {
+					alert("Error");
+				}
+			})
+		});
 	});
 
 </script>
