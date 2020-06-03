@@ -22,4 +22,6 @@ def add_data(request):
 	# 	email = request.POST['email']		
 
 	# return HttpResponse("Data Entry")
-	return render(request, 'html/index.html')
+	# return an object to HTML page 
+	# get cols
+	return render(request, 'html/index.html',{'column': cols })
