@@ -92,7 +92,6 @@
             e.preventDefault();
 				//console.log("display1");
 				let selectedFile = document.getElementById('file').files[0];
-
 				Papa.parse(selectedFile, {
 				complete: function(results) {
 					console.log("Finished:", results.data, "Total:  ", results.data.length );

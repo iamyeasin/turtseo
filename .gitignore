@@ -1,4 +1,5 @@
 venv/*
+html/PapaParse/*
 .vscode
 # turtseo/venv/*
 gitignore
