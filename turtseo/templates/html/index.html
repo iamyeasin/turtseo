@@ -132,7 +132,6 @@
 
 			for (i = 0; i < parseData.length; i++) {
 				var row = parseData[i];
-
 				URLList.push(row["Referring Page URL"]);
 				DRList.push(row["Domain Rating"]);
 			}
@@ -144,6 +143,7 @@
 				type: 'POST',
 				url: '',
 				data: {
+					'key_link': $("#linkid").val(),
 					'urlList': URLList,
 					'drList': DRList,
 				},

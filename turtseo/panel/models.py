@@ -1,8 +1,10 @@
 from django.db import models
 
-class Key_Link(models.Model):
-    key_ID = models.IntegerField(primary_key=True, unique=True)
-    key_link = models.CharField(max_length=500)
+class Key_Link_List(models.Model):
+    key_link = models.CharField(max_length=500, unique=True, primary_key = True)
+
+    def __str__(self):
+        return self.key_link
 
 
 class Niche(models.Model):
@@ -16,13 +18,13 @@ class Column_Set(models.Model):
 
 
 class Profile(models.Model):
-    key_link = models.ForeignKey(Key_Link, on_delete=models.CASCADE)
+    key_link = models.ForeignKey(Key_Link_List, on_delete=models.CASCADE)
     url = models.URLField()
     domanin_rank = models.IntegerField()
 
 
 class Profile_Extended(models.Model):
-    key_link = models.ForeignKey(Key_Link, on_delete=models.CASCADE)
+    key_link = models.ForeignKey(Key_Link_List, on_delete=models.CASCADE)
     domanin_auth = models.CharField(max_length=500)
     traffic = models.IntegerField(blank=False)
     spam_score = models.IntegerField(blank=False)
