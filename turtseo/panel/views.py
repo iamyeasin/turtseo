@@ -11,9 +11,12 @@ def FileUpload(request):
 	print("File Upload")
 	
 	if request.method == 'POST':
-		file = json.loads(request.POST.get('sample'))
-		print(file)
-		print(str(file))
+		URLList = request.POST.getlist('urlList[]')
+		DRList = request.POST.getlist('drList[]')
+
+		print(URLList)
+		print(DRList)
+
 	else:
 		print("Fuck")
 	

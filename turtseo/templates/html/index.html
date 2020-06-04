@@ -97,34 +97,61 @@
 <script>
 
 	$(document).ready(function (e) {
+
+		var parseData = [];
+
+		$("#file").change(function (e) {
+			e.preventDefault();
+
+			let selectedFile = document.getElementById('file').files[0];
+
+			function parseCSV(csvFile) {
+				console.log("CSV file:", csvFile);
+				Papa.parse(csvFile, {
+					header: true,
+					download: true,
+					dynamicTyping: true,
+					complete: function (results) {
+						parseData = results.data;
+						console.log("File Found:", parseData.data);
+					},
+				});
+			}
+
+			console.log("Before Parse:", parseData);
+			parseCSV(selectedFile);
+			// console.log("After Parse:", parseData);
+		});
+
 		$("#save").click(function (e) {
 			e.preventDefault();
-			//console.log("display1");
-			let selectedFile = document.getElementById('file').files[0];
-			Papa.parse(selectedFile, {
-				complete: function (results) {
-					var file = results.data;
+			console.log("After Parse:", parseData);
 
-					var row_titles = JSON.stringify(file[0]);
-					console.log(row_titles);
-					console.log(row_titles.length);
+			var URLList = [];
+			var DRList = [];
 
-					console.log("Finished:", results.data, "Total:  ", results.data.length);
-				}
-			});
-			// readSingleFile();
+			for (i = 0; i < parseData.length; i++) {
+				var row = parseData[i];
+
+				URLList.push(row["Referring Page URL"]);
+				DRList.push(row["Domain Rating"]);
+			}
+
+			console.log("List: Referring Page URL", URLList);
+			console.log("List: Domain Rating", DRList);
 
 			$.ajax({
 				type: 'POST',
 				url: '',
 				data: {
-					sample : row_titles
+					'urlList': URLList,
+					'drList': DRList,
 				},
 				success: function (gotIt, status) {
-					alert("Data Passed");
+					alert("RAW DATA paisi");
 				},
 				error: function () {
-					alert("Error");
+					alert("Data Pai nai");
 				}
 			})
 		});
