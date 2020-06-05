@@ -129,18 +129,26 @@
 
 			var URLList = [];
 			var DRList = [];
+			var data = "";
 
 			for (i = 0; i < parseData.length; i++) {
 				var row = parseData[i];
 				// url.replace('http://','').replace('https://','').split(/[/?#]/)[0]
-				let url = row["Referring Page URL"];
-				url = url.replace('http://','').replace('https://','').split(/[/?#]/)[0];
-				URLList.push(url);
-				DRList.push(row["Domain Rating"]);
+				data = row["Referring Page URL"];
+				// console.log(data);
+
+				if(data != undefined){
+					var domain = data.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+					// console.log(domain);
+					URLList.push(domain);
+					DRList.push(row["Domain Rating"]);
+				}
 			}
 
 			console.log("List: Referring Page URL", URLList);
+			console.log("Referring Page URL Data found: ", URLList.length)
 			console.log("List: Domain Rating", DRList);
+			console.log("Domain Rating Data found:", DRList.length);
 
 			$.ajax({
 				type: 'POST',
