@@ -42,17 +42,6 @@ def FileUpload(request):
 	return render(request, 'html/index.html')
 
 
-
-
-
-
-
-
-
-
-
-
-
 @csrf_exempt
 def search(request):	
 	if(request.method == 'POST'):
