@@ -82,6 +82,7 @@ DATABASES = {
         'NAME': 'turtseodb',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
+        # 'PASSWORD': '1234',
         'HOST': 'localhost',
     }
 }
@@ -126,7 +127,7 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR,'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'templates\html'),
+    os.path.join(BASE_DIR, 'templates/html'),
 ]
 
 
