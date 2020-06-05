@@ -1,0 +1,98 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Turt Seo</title>
+	<!-- CSS only -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="style.css">
+
+	<!-- JS, Popper.js, and jQuery -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="container">
+		<h1>Turtseo Data Panel</h1>
+	</div>
+	<form action="{% url 'search' %}" method="POST">
+		{% csrf_token %}
+		<div class="container form-group">
+			<div class="form-group row pt-5">
+		    <label for="" class="col-sm-2 col-form-label">Enter Key Link </label>
+		    <div class="col-sm-6">
+		      <input type="text" name="keyLink" class="form-control" id="keyLink" value="">
+		    </div>	
+		  	<div class="col-sm-2">
+		  		<input type="submit" name="submit" id="submit" value="Submit" class="form-control btn btn-primary">
+		  	</div>
+		</div>
+	</form>
+	
+
+	<section id="search_link" class="py-1">
+		<div class="container">
+	  		<div class="row">
+	  			{% if search_link %}
+	  				<div class="row py-2 text-secondary">
+	                    <div class="col-6">
+	                      <i class="row py-2 text-secondary"></i>Key Link: {{ search_link }}</div>                    
+	                </div>
+		        {% else %}       
+		          <div class="col-md-12"></div>          	
+		            <p>No Data Available</p>
+		        {% endif %} 					
+	  		</div>
+	  	</div>
+	</section>
+
+	<hr>
+
+	<section id="link_list" class="py-1">
+		<div class="container">
+	  		<div class="row">
+	  			{% if link_list %}
+	  				{% for link in link_list %}
+		                <div class="row py-2 text-secondary">
+		                    <div class="col-6">		                    	
+		                      <i class="fas fa-th-large"></i>URL: {{ link.url }}</div>		                      
+		                </div>
+			        {% endfor %}
+		        {% else %}       
+		          <div class="col-md-12"></div>          	
+		            <p>No Data Available</p>
+		        {% endif %} 					
+	  		</div>
+	  	</div>
+	</section>
+
+	<hr>
+
+	<section id="dataList" class="py-1">
+		<div class="container">
+	  		<div class="row">
+	  			{% if dataList %}
+	  				{% for key,val in dataList.items %}		  					
+		                <div class="row py-2 text-secondary">
+		                    <div class="col-6">
+		                      <i class="fas fa-th-large"></i>Key Link: {{ key }}</div>
+		                    <div class="row py-2 text-primary">
+		                      <i class="fas fa-car"></i>Count: {{ val }}</div>
+		                </div>
+			        {% endfor %}
+		        {% else %}       
+		          <div class="col-md-12"></div>          	
+		            <p>No Data Available</p>
+		        {% endif %} 					
+	  		</div>
+	  	</div>
+	</section>
+
+	
+</body>
+</html>
+
+
+{% endblock %} 

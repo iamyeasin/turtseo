@@ -39,3 +39,51 @@ def FileUpload(request):
 	
 	return render(request, 'html/index.html')
 
+
+
+
+
+
+
+
+
+
+
+
+
+@csrf_exempt
+def search(request):	
+	if(request.method == 'POST'):
+		link = request.POST['keyLink']		
+		
+		queryLinks = Profile.objects.filter(key_link__key_link__icontains=link) #grab requested keylink profile from database
+		
+		dicts = {}
+		key_Links = Key_Link_List.objects.all() #grab all keylink from database
+		for key_Link in key_Links:
+			k_link = key_Link.key_link
+			dicts[k_link] = 0
+
+		for queryLink in queryLinks:			
+			for key_Link in key_Links:
+
+				qLink = queryLink.url
+				k_link = key_Link.key_link
+
+				links_in_profils = Profile.objects.filter(key_link__key_link__icontains=k_link)
+				
+				for links_in_profil in links_in_profils:										
+					if qLink == links_in_profil.url:
+						val = dicts.get(k_link)
+						dicts[k_link] = val+1				
+
+		context = {
+			'dataList': dicts,
+			'link_list' : queryLinks,
+			'search_link' : link
+		}		
+		return render(request, 'html/search.html', context)	
+	return render(request, 'html/search.html')	
+
+
+
