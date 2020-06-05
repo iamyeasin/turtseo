@@ -7,6 +7,13 @@ class Key_Link_List(models.Model):
         return self.key_link
 
 
+class Link_Counter(models.Model):
+    key_link = models.ForeignKey(Key_Link_List, on_delete=models.CASCADE)
+    compare_key_link = models.CharField(max_length=500)
+    no_of_data_matched = models.IntegerField(default=0)
+    compare_key_link_no_of_data = models.IntegerField(default=0)
+
+
 class Niche(models.Model):
     niche_ID = models.IntegerField(primary_key=True, unique=True)
     tag = models.CharField(max_length=500)
