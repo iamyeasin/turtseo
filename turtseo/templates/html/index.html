@@ -132,7 +132,10 @@
 
 			for (i = 0; i < parseData.length; i++) {
 				var row = parseData[i];
-				URLList.push(row["Referring Page URL"]);
+				// url.replace('http://','').replace('https://','').split(/[/?#]/)[0]
+				let url = row["Referring Page URL"];
+				url = url.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+				URLList.push(url);
 				DRList.push(row["Domain Rating"]);
 			}
 
