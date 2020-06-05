@@ -41,3 +41,8 @@ def FileUpload(request):
 	
 	return render(request, 'html/index.html')
 
+
+@csrf_exempt
+def Search(request):
+	print("search")
+	return render(request, 'html/search.html')
