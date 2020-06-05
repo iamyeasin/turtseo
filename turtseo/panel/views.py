@@ -42,17 +42,6 @@ def FileUpload(request):
 	return render(request, 'html/index.html')
 
 
-
-
-
-
-
-
-
-
-
-
-
 @csrf_exempt
 def search(request):	
 	if(request.method == 'POST'):
@@ -77,7 +66,7 @@ def search(request):
 				for links_in_profil in links_in_profils:										
 					if qLink == links_in_profil.url:
 						val = dicts.get(k_link)
-						dicts[k_link] = val+1				
+						dicts[k_link] = val+1		
 
 		context = {
 			'dataList': dicts,
