@@ -123,21 +123,37 @@
 			// console.log("After Parse:", parseData);
 		});
 
+		function clean(urls){
+			var ans = urls.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+			return ans;
+		};
+
 		$("#save").click(function (e) {
 			e.preventDefault();
 			console.log("After Parse:", parseData);
 
 			var URLList = [];
 			var DRList = [];
+			var data = "";
 
 			for (i = 0; i < parseData.length; i++) {
 				var row = parseData[i];
-				URLList.push(row["Referring Page URL"]);
-				DRList.push(row["Domain Rating"]);
+				// url.replace('http://','').replace('https://','').split(/[/?#]/)[0]
+				data = row["Referring Page URL"];
+				// console.log(data);
+
+				if(data != undefined){
+					var domain = clean(data+"");
+					// console.log(domain);
+					URLList.push(domain);
+					DRList.push(row["Domain Rating"]);
+				}
 			}
 
 			console.log("List: Referring Page URL", URLList);
+			console.log("Referring Page URL Data found: ", URLList.length)
 			console.log("List: Domain Rating", DRList);
+			console.log("Domain Rating Data found:", DRList.length);
 
 			$.ajax({
 				type: 'POST',

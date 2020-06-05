@@ -34,6 +34,8 @@ def FileUpload(request):
 			)
 			profile.save()
 
+		print("Data Saved into Model")
+
 	else:
 		print("No Data Found")
 	
