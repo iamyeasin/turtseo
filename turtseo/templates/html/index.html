@@ -123,8 +123,8 @@
 			// console.log("After Parse:", parseData);
 		});
 
-		function clean(urls){
-			var ans = urls.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+		function clean(urls) {
+			var ans = urls.replace('http://', '').replace('https://', '').split(/[/?#]/)[0];
 			return ans;
 		};
 
@@ -142,8 +142,8 @@
 				data = row["Referring Page URL"];
 				// console.log(data);
 
-				if(data != undefined){
-					var domain = clean(data+"");
+				if (data != undefined) {
+					var domain = clean(data + "");
 					// console.log(domain);
 					URLList.push(domain);
 					DRList.push(row["Domain Rating"]);

@@ -1,5 +1,5 @@
 from django.contrib import admin 
-from .models import Key_Link_List, Niche, Column_Set, Profile, Profile_Extended
+from .models import *
 
 class Key_LinkAdmin(admin.ModelAdmin):
 	list_display = ('key_link',)
@@ -7,9 +7,15 @@ class Key_LinkAdmin(admin.ModelAdmin):
 	search_fields = ('key_link',)
 	list_per_page = 30
 
+class Key_Link_Counter(admin.ModelAdmin):
+	list_display = ('key_link', 'compare_key_link', 'no_of_data_matched', 'compare_key_link_no_of_data')
+	list_display_links = ('key_link', 'compare_key_link')
+	search_fields = ('key_link', 'compare_key_link')
+	list_per_page = 30
+
 class ProfileAdmin(admin.ModelAdmin):
 	list_display = ('key_link','url','domanin_rank')
-	list_display_links = ('key_link','domanin_rank')
+	list_display_links = ('key_link','url')
 	search_fields = ('key_link','url')
 	list_per_page = 30
 
@@ -23,3 +29,4 @@ admin.site.register(Niche)
 admin.site.register(Column_Set)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Profile_Extended, Profile_ExtendedAdmin)
+admin.site.register(Link_Counter, Key_Link_Counter)
