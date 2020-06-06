@@ -41,9 +41,7 @@ def FileUpload(request):
 	
 	return render(request, 'html/index.html')
 
-
-@csrf_exempt
-def search(request):	
+def Search(request):	
 	if(request.method == 'POST'):
 		link = request.POST['keyLink']		
 		
@@ -75,6 +73,3 @@ def search(request):
 		}		
 		return render(request, 'html/search.html', context)	
 	return render(request, 'html/search.html')	
-
-
-
