@@ -1,0 +1,1 @@
+web: gunicorn turtseo/turtseo.wsgi --log-file -

@@ -103,6 +103,7 @@
 			e.preventDefault();
 			let selectedFile = document.getElementById('file').files[0];
 			function parseCSV(csvFile) {
+
 				Papa.parse(csvFile, {
 					header: true,
 					download: true,
@@ -122,7 +123,7 @@
 
 		$("#save").click(function (e) {
 			e.preventDefault();
-
+      
 			var URLList = [];
 			var DRList = [];
 			var data = "";
@@ -137,7 +138,6 @@
 					DRList.push(row["Domain Rating"]);
 				}
 			}
-
 			$.ajax({
 				type: 'POST',
 				url: '',
