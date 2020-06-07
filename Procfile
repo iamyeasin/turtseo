@@ -1,1 +1,1 @@
-web: gunicorn turtseo/turtseo.wsgi --log-file -
+web: gunicorn turtseo.wsgi --log-file -
