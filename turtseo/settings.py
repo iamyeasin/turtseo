@@ -89,8 +89,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'turtseodb',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        # 'PASSWORD': '1234',
+        # 'PASSWORD': 'postgres',
+        'PASSWORD': '1234',
         'HOST': 'localhost',
     }
 }
