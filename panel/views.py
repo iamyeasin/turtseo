@@ -123,6 +123,31 @@ def FileUpload(request):
 					)
 					link_counter_model.save()
 
+
+		# Profile Extended Model
+
+		post_niche = request.POST.get('niche')
+		post_dr = request.POST.get('dr')
+		post_da = request.POST.get('da')
+		post_spamscore = request.POST.get('spamscore')
+		post_traffic = request.POST.get('traffic')
+		post_existingcost = request.POST.get('existingcost')
+		post_new_Cost = request.POST.get('new_cost')
+		post_email = request.POST.get('email')
+
+		profile_extended_model = Profile_Extended(
+			key_link = key_id,						# Key Link List Foreign Key
+			domanin_auth = post_da,
+			traffic = post_traffic,
+			spam_score = post_spamscore,
+			existing_cost = post_existingcost,
+			new_cost = post_new_Cost,
+			email = post_email,
+			niche = post_niche,
+		)
+
+		profile_extended_model.save()
+
 		print("Data Saved")
 				
 	else:
