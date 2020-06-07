@@ -74,7 +74,7 @@
 				</div>
 				<label for="" class="col-sm-2 col-form-label">New Cost </label>
 				<div class="col-sm-4">
-					<input type="text" class="form-control" id="new Cost" value="">
+					<input type="text" class="form-control" id="new_cost" value="">
 				</div>
 			</div>
 			<div class="form-group row">
@@ -97,64 +97,47 @@
 <script>
 
 	$(document).ready(function (e) {
-
 		var parseData = [];
 
 		$("#file").change(function (e) {
 			e.preventDefault();
-
 			let selectedFile = document.getElementById('file').files[0];
-
 			function parseCSV(csvFile) {
-				console.log("CSV file:", csvFile);
+
 				Papa.parse(csvFile, {
 					header: true,
 					download: true,
 					dynamicTyping: true,
 					complete: function (results) {
 						parseData = results.data;
-						console.log("File Found:", parseData.data);
 					},
 				});
 			}
-
-			console.log("Before Parse:", parseData);
 			parseCSV(selectedFile);
-			// console.log("After Parse:", parseData);
 		});
 
-		function clean(urls){
-			var ans = urls.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+		function clean(urls) {
+			var ans = urls.replace('http://', '').replace('https://', '').split(/[/?#]/)[0];
 			return ans;
 		};
 
 		$("#save").click(function (e) {
 			e.preventDefault();
-			console.log("After Parse:", parseData);
-
+      
 			var URLList = [];
 			var DRList = [];
 			var data = "";
 
 			for (i = 0; i < parseData.length; i++) {
 				var row = parseData[i];
-				// url.replace('http://','').replace('https://','').split(/[/?#]/)[0]
 				data = row["Referring Page URL"];
-				// console.log(data);
 
-				if(data != undefined){
-					var domain = clean(data+"");
-					// console.log(domain);
+				if (data != undefined) {
+					var domain = clean(data + "");
 					URLList.push(domain);
 					DRList.push(row["Domain Rating"]);
 				}
 			}
-
-			console.log("List: Referring Page URL", URLList);
-			console.log("Referring Page URL Data found: ", URLList.length)
-			console.log("List: Domain Rating", DRList);
-			console.log("Domain Rating Data found:", DRList.length);
-
 			$.ajax({
 				type: 'POST',
 				url: '',
@@ -162,6 +145,14 @@
 					'key_link': $("#linkid").val(),
 					'urlList': URLList,
 					'drList': DRList,
+					'niche': $("#niche").val(),
+					'dr': $("#dr").val(),
+					'da': $("#da").val(),
+					'spamscore': $("#spamscore").val(),
+					'traffic': $("#traffic").val(),
+					'existingcost': $("#existingcost").val(),
+					'new_cost': $("#new_cost").val(),
+					'email': $("#email").val(),
 				},
 				success: function (gotIt, status) {
 					alert("RAW DATA paisi");
