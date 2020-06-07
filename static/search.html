@@ -132,6 +132,11 @@
 					var dataset = JSON.parse(data['dataset']);
 					var len = dataset.length;
 
+					document.getElementById("top10data").innerHTML = "";
+					document.getElementById("least10data").innerHTML = "";
+					document.getElementById("completeListfirst").innerHTML = "";
+					document.getElementById("completeListSecond").innerHTML = "";
+
 					if (len > 0) {
 						var castData = [];
 
@@ -177,6 +182,8 @@
 					else {
 						alert("Sorry, No Key Found")
 					}
+
+					$("#insearch").val("");
 				},
 				error: function () {
 					alert("No Data");

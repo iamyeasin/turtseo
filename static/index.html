@@ -2,53 +2,30 @@
 <!DOCTYPE html>
 <html>
 
-
-
-
-<nav class="navbar navbar-expand-lg bg-dark bg-primary sticky-top">	
+<nav class="navbar navbar-expand-lg bg-dark bg-primary sticky-top">
 	<!-- <nav class="navbar navbar-dark bg-dark">  -->
-	    <div class="container">	        
-	        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-	            <ul class="navbar-nav">
-	                <li 
-	                    {% if '/' == request.path %}
-	                        class="nav-item active mr-3"
-	                    {% else %}
-	                        class="nav-item mr-3"
-	                    {% endif %}
-	                >
-	                    <a class="nav-link" href="{% url 'index' %}">Home</a>
-	                </li>
-	                
-	                <li 
-	                    {% if 'search' in request.path %}
-	                        class="nav-item active mr-3"
-	                    {% else %}
-	                        class="nav-item mr-3"
-	                    {% endif %}
-	                >
-	                    <a class="nav-link" href="{% url 'search' %}">Search</a>
-	                </li>
+	<div class="container">
+		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+			<ul class="navbar-nav">
+				<li {% if '/' == request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
+					{% endif %}>
+					<a class="nav-link" href="{% url 'index' %}">Home</a>
+				</li>
 
-	                <li 
-	                    {% if 'admin' in request.path %}
-	                        class="nav-item active mr-3"
-	                    {% else %}
-	                        class="nav-item mr-3"
-	                    {% endif %}
-	                >
-	                    <a class="nav-link" href="{% url 'admin:index' %}">Admin Login</a>
-	                </li>
-	                
-	            </ul>
-	        </div>
-	    </div>
-	</nav>
+				<li {% if 'search' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
+					{% endif %}>
+					<a class="nav-link" href="{% url 'search' %}">Search</a>
+				</li>
 
+				<li {% if 'admin' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
+					{% endif %}>
+					<a class="nav-link" href="{% url 'admin:index' %}">Admin Login</a>
+				</li>
 
-
-
-
+			</ul>
+		</div>
+	</div>
+</nav>
 
 <head>
 	<title>Turt Seo</title>
@@ -136,8 +113,6 @@
 			</div>
 		</div>
 	</form>
-	<!--  -->
-
 
 </body>
 {% block script %}
@@ -171,7 +146,7 @@
 
 		$("#save").click(function (e) {
 			e.preventDefault();
-      
+
 			var URLList = [];
 			var DRList = [];
 			var data = "";
@@ -203,7 +178,17 @@
 					'email': $("#email").val(),
 				},
 				success: function (gotIt, status) {
-					alert("RAW DATA paisi");
+					$("#linkid").val("");
+					$("#niche").val("");
+					$("#dr").val("");
+					$("#da").val("");
+					$("#spamscore").val("");
+					$("#traffic").val("");
+					$("#existingcost").val("");
+					$("#new_cost").val("");
+					$("#email").val("");
+					document.getElementById('file').value = null;
+					alert("Data Saved");
 				},
 				error: function () {
 					alert("Data Pai nai");
