@@ -32,7 +32,8 @@ class Profile(models.Model):
 
 class Profile_Extended(models.Model):
     key_link = models.ForeignKey(Key_Link_List, on_delete=models.CASCADE)
-    domanin_auth = models.CharField(max_length=500)
+    domanin_rank = models.CharField(max_length=500, default="")
+    domanin_auth = models.CharField(max_length=500, default="")
     traffic = models.IntegerField(blank=False)
     spam_score = models.IntegerField(blank=False)
     existing_cost = models.IntegerField(blank=False)

@@ -137,6 +137,7 @@ def FileUpload(request):
 
 		profile_extended_model = Profile_Extended(
 			key_link = key_id,						# Key Link List Foreign Key
+			domanin_rank = post_dr,
 			domanin_auth = post_da,
 			traffic = post_traffic,
 			spam_score = post_spamscore,
@@ -171,6 +172,5 @@ def Search(request):
 
 		data = {"dataset": serialized}
 		return JsonResponse(data, safe=False)
-
-	else:
-		return render(request, 'html/search.html')
+		
+	return render(request, 'html/search.html')
