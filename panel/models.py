@@ -6,6 +6,9 @@ class Key_Link_List(models.Model):
     def __str__(self):
         return self.key_link
 
+    def delete(self):
+        return Key_Link_List.objects.all().delete()
+
 
 class Link_Counter(models.Model):
     key_link = models.ForeignKey(Key_Link_List, on_delete=models.CASCADE)
