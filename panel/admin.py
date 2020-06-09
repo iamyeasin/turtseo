@@ -20,7 +20,7 @@ class ProfileAdmin(admin.ModelAdmin):
 	list_per_page = 30
 
 class Profile_ExtendedAdmin(admin.ModelAdmin):
-	list_display = ('key_link','domanin_auth','spam_score')
+	list_display = ('key_link','domanin_rank','domanin_auth','spam_score')
 	list_display_links = ('key_link','domanin_auth')
 	list_per_page = 30
 

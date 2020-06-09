@@ -2,57 +2,30 @@
 <!DOCTYPE html>
 <html>
 
-
-
-
-
-
-<nav class="navbar navbar-expand-lg bg-dark bg-primary sticky-top">	
+<nav class="navbar navbar-expand-lg bg-dark bg-primary sticky-top">
 	<!-- <nav class="navbar navbar-dark bg-dark">  -->
-	    <div class="container">	        
-	        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-	            <ul class="navbar-nav">
-	                <li 
-	                    {% if '/' == request.path %}
-	                        class="nav-item active mr-3"
-	                    {% else %}
-	                        class="nav-item mr-3"
-	                    {% endif %}
-	                >
-	                    <a class="nav-link" href="{% url 'index' %}">Home</a>
-	                </li>
-	                
-	                <li 
-	                    {% if 'search' in request.path %}
-	                        class="nav-item active mr-3"
-	                    {% else %}
-	                        class="nav-item mr-3"
-	                    {% endif %}
-	                >
-	                    <a class="nav-link" href="{% url 'search' %}">Search</a>
-	                </li>
+	<div class="container">
+		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+			<ul class="navbar-nav">
+				<li {% if '/' == request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
+					{% endif %}>
+					<a class="nav-link" href="{% url 'index' %}">Home</a>
+				</li>
 
-	                <li 
-	                    {% if 'admin' in request.path %}
-	                        class="nav-item active mr-3"
-	                    {% else %}
-	                        class="nav-item mr-3"
-	                    {% endif %}
-	                >
-	                    <a class="nav-link" href="{% url 'admin:index' %}">Admin Login</a>
-	                </li>
-	                
-	            </ul>
-	        </div>
-	    </div>
-	</nav>
+				<li {% if 'search' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
+					{% endif %}>
+					<a class="nav-link" href="{% url 'search' %}">Search</a>
+				</li>
 
+				<li {% if 'admin' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
+					{% endif %}>
+					<a class="nav-link" href="{% url 'admin:index' %}">Admin Login</a>
+				</li>
 
-
-
-
-
-
+			</ul>
+		</div>
+	</div>
+</nav>
 
 
 <head>
@@ -158,46 +131,59 @@
 				success: function (data) {
 					var dataset = JSON.parse(data['dataset']);
 					var len = dataset.length;
-					var castData = [];
 
-					for (var i = 0; i < len; i++) {
-						var percent = parseFloat(dataset[i].fields.no_of_data_matched) / parseFloat(dataset[i].fields.compare_key_link_no_of_data) * 100.0;
-						castData.push({ 'url': dataset[i].fields.compare_key_link, 'percentage': parseInt(percent) });
+					document.getElementById("top10data").innerHTML = "";
+					document.getElementById("least10data").innerHTML = "";
+					document.getElementById("completeListfirst").innerHTML = "";
+					document.getElementById("completeListSecond").innerHTML = "";
+
+					if (len > 0) {
+						var castData = [];
+
+						for (var i = 0; i < len; i++) {
+							var percent = parseFloat(dataset[i].fields.no_of_data_matched) / parseFloat(dataset[i].fields.compare_key_link_no_of_data) * 100.0;
+							castData.push({ 'url': dataset[i].fields.compare_key_link, 'percentage': parseInt(percent) });
+						}
+
+						castData.sort(function (a, b) {
+							return ((a.percentage > b.percentage) ? -1 : ((a.percentage == b.percentage) ? 0 : 1));
+						});
+
+						var count = 0;
+
+						for (var i = 0; i < castData.length; i++) {
+							var test = "<li> " + castData[i].url + " <b><span style=" + '"padding-left: 100px; color:#46E956;"' + ">" + castData[i].percentage + "%" + "</span></b> </li>"
+
+							if (count < 10) {
+								$('#top10data').append(test);
+							}
+							count = count + 1;
+						}
+
+						count = 0;
+						for (var i = castData.length - 1; i >= 0; i--) {
+							var test = "<li> " + castData[i].url + " <b><span style=" + '"padding-left: 100px; color:#46E956;"' + ">" + castData[i].percentage + "%" + "</span></b> </li>"
+							if (count < 10) {
+								$('#least10data').append(test);
+							}
+							count = count + 1;
+						}
+
+						for (var i = 0; i < castData.length; i++) {
+							var test = "<li> " + castData[i].url + " <b><span style=" + '"padding-left: 100px; color:#46E956;"' + ">" + castData[i].percentage + "%" + "</span></b> </li>"
+							if (i < 10) {
+								$('#completeListfirst').append(test);
+							}
+							else {
+								$('#completeListSecond').append(test);
+							}
+						}
+					}
+					else {
+						alert("Sorry, No Key Found")
 					}
 
-					castData.sort(function (a, b) {
-						return ((a.percentage > b.percentage) ? -1 : ((a.percentage == b.percentage) ? 0 : 1));
-					});
-
-					var count = 0;
-
-					for (var i = 0; i < castData.length; i++) {
-						var test = "<li> " + castData[i].url + " <b><span style=" + '"padding-left: 100px; color:#46E956;"' + ">" + castData[i].percentage + "%" + "</span></b> </li>"
-						
-						if (count < 10){
-							$('#top10data').append(test);
-						}
-						count = count + 1;
-					}
-
-					count = 0;
-					for (var i = castData.length - 1; i >= 0; i--) {
-						var test = "<li> " + castData[i].url + " <b><span style=" + '"padding-left: 100px; color:#46E956;"' + ">" + castData[i].percentage + "%" + "</span></b> </li>"
-						if (count < 10) {
-							$('#least10data').append(test);
-						}
-						count = count + 1;
-					}
-
-					for (var i = 0; i < castData.length; i++) {
-						var test = "<li> " + castData[i].url + " <b><span style=" + '"padding-left: 100px; color:#46E956;"' + ">" + castData[i].percentage + "%" + "</span></b> </li>"
-						if (i < 10) {
-							$('#completeListfirst').append(test);
-						}
-						else {
-							$('#completeListSecond').append(test);
-						}
-					}
+					$("#insearch").val("");
 				},
 				error: function () {
 					alert("No Data");
