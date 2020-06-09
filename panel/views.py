@@ -60,33 +60,29 @@ def Search(request):
 
 
 @csrf_exempt
-def  Search_Url_list(request):
+def Search_Url_list(request):
 	if request.method == "POST":
 		searched_key_Link = request.POST.get('key_data')
 		compare_key_Link = request.POST.get('compare_data')
-		print(searched_key_Link)
-		print(compare_key_Link)
-
-		key_Links = Key_Link_List.objects.all() # all key_link from Key_Link_List table			
+		
 		searched_key_Link_urls = Profile.objects.filter(key_link=searched_key_Link) #all url of searched key_link
 		compare_key_Link_urls = Profile.objects.filter(key_link=compare_key_Link) #all url of compare key_link
 		
-		matched_url = {}	
+		matched_url = []	
 		for i in searched_key_Link_urls:
 			for j in compare_key_Link_urls:			
 				if(i.url == j.url):
-					matched_url[i.url] = 0
+					matched_url.append(i.url)
 		
-		for key,val in matched_url.items():						
-			for link in key_Links:													
-				if(str(key) == str(link)): 
-					matched_url[key] = 1
+		matched_key_link = []
+		for obj in matched_url:
+			if(Key_Link_List.objects.filter(key_link = obj)):
+				matched_key_link.append(1)
+			else:
+				matched_key_link.append(0)
 		
-		for k,v in matched_url.items():
-			print(k,v)
-		
-		url_data = json.dumps({ 'url_list' : matched_url})
+		url_data = json.dumps({'url' : matched_url, 'isKey': matched_key_link})
 		return JsonResponse(url_data, safe=False)
 
 	else:
-		return render(request, 'html/search.html')		
+		return render(request, 'html/url_list.html')

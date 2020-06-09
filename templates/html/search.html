@@ -50,26 +50,6 @@
 
 	<h1>Turtseo Search Panel</h1>
 
-	<!-- Button trigger modal -->
-	<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCenter">Show
-		URL</button> -->
-
-	<!-- Modal -->
-	<div class="modal fade" id="modalCenter" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle"
-		aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="modalCenterTitle">URL List</h5>
-				</div>
-				<div class="modal-body" id="modal-body"></div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
 	<!-- Search Form -->
 
 	<form method="POST">
@@ -145,38 +125,15 @@
 
 	$(document).ready(function (e) {
 
-
-		function getDataReq( search,copmare, e ){
-			e.preventDefault();
-			 $.ajax({
-				type: 'POST',
-				url: '/url_list', // A new url in django
-				data: {
-					'key_data': search,
-					'compare_data': copmare
-				},
-				success: function(datas){
-                  // console.log("Sucesssssss")
-                  // Do the modal thing
-                  console.log(JSON.parse(datas)); 
-                  Console.log("Data found" + datas);
-	   //            var myHeading = "<ol><li>I Fuck Your System</li><li>I Fuck Your System</li><li>I Fuck Your System</li><li>I Fuck Your System</li><li>I Fuck Your System</li><li>I Fuck Your System</li></ol>";
-				// $("#modal-body").html(myHeading);
-
-                },
-                error: function( req, status, err ) {
-                  // console.log( 'something went wrong', status, err );
-                  alert("Didn't found any match");
-                },
-			})
+		function setCookie(cname, cvalue, exdays) {
+			var d = new Date();
+			d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+			var expires = "expires=" + d.toUTCString();
+			document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 		}
-		 
-
 
 		$("#search").click(function (e) {
 			e.preventDefault();
-
-
 
 			$.ajax({
 				type: 'POST',
@@ -206,7 +163,6 @@
 							return ((a.percentage > b.percentage) ? -1 : ((a.percentage == b.percentage) ? 0 : 1));
 						});
 
-
 						//  Top 10 Datas
 						var count = 0;
 
@@ -214,7 +170,7 @@
 							var test = "<li id=" + "tp" + i + ">" + castData[i].url + " <b><span style=" + '"padding-left: 50px; color:#FF0000;"' + ">"
 								+ castData[i].match + "</span></b>" + " <b><span style=" + '"padding-left: 50px; padding-right:50px; color:#46E956;"' + ">"
 								+ castData[i].percentage + "%" + "</span></b> <button type=" + '"button"' + " class=" + '"btn btn-primary"'
-								+ " data-toggle=" + '"modal"' + " data-target=" + '"#modalCenter"' + "id=" + "showtp_" + i +  ">Show URL</button></li>"
+								+ "id=" + "showtp_" + i + ">Show URL</button></li>"
 
 							if (count < 10) {
 								$('#top10data').append(test);
@@ -222,34 +178,34 @@
 							count = count + 1;
 						}
 
-
-
-
 						// Send request to server for another compare of data
-						$("[id*='showtp']").click(function(e){
+						$("[id*='showtp']").click(function (e) {
 							e.preventDefault();
+
 							var number = $(this).attr('id').split('_').pop(); //Geting the number for upload episode
-                			var src = $('#tp' + number).text().split(" ")[0];
-                			
-                			if( src == "" ){
-			                  	alert("Data couldn't be extracted from button clicking, Possible ID Not Found Error");
-			                  return false;
-			                }
-			                getDataReq($("#insearch").val(),src,e);
+							var src = $('#tp' + number).text().split(" ")[0];
+
+							if (src == "") {
+								alert("Data couldn't be extracted from button clicking, Possible ID Not Found Error");
+								return false;
+							}
+
+							setCookie('key_data', $("#insearch").val(), 1);
+							setCookie('compare_data', src, 1);
+
+							var url = 'http://' + window.location.host + '/url_list';
+							window.open(url, "_blank");
 
 						});
 
-
-						// Grabbing IDs for top 10 view detail data
-
-						// Least 10"<li id=" + "tp" + i + ">"
-
+						// Least 10
 						count = 0;
+
 						for (var i = castData.length - 1; i >= 0; i--) {
 							var test = "<li id=" + "lt" + i + ">" + castData[i].url + " <b><span style=" + '"padding-left: 50px; color:#FF0000;"' + ">"
 								+ castData[i].match + "</span></b>" + " <b><span style=" + '"padding-left: 50px; padding-right:50px; color:#46E956;"' + ">"
 								+ castData[i].percentage + "%" + "</span></b> <button type=" + '"button"' + " class=" + '"btn btn-primary"'
-								+ " data-toggle=" + '"modal"' + " data-target=" + '"#modalCenter"' + "id=" + "showlt_" + i +  ">Show URL</button></li>"
+								+ " data-toggle=" + '"modal"' + " data-target=" + '"#modalCenter"' + "id=" + "showlt_" + i + ">Show URL</button></li>"
 
 							if (count < 10) {
 								$('#least10data').append(test);
@@ -258,26 +214,27 @@
 						}
 
 						// Request from least 10 data
-						$("[id*='showlt']").click(function(e){
+						$("[id*='showlt']").click(function (e) {
 							e.preventDefault();
 							var number = $(this).attr('id').split('_').pop(); //Geting the number for upload episode
-                			var src = $('#lt' + number).text().split(" ")[0];
-                			
-                			if( src == "" ){
-			                  	alert("Data couldn't be extracted from button clicking, Possible ID Not Found Error");
-			                  return false;
-			                }
-			                getDataReq($("#insearch").val(),src,e);
+							var src = $('#lt' + number).text().split(" ")[0];
 
+							if (src == "") {
+								alert("Data couldn't be extracted from button clicking, Possible ID Not Found Error");
+								return false;
+							}
+							setCookie('key_data', $("#insearch").val(), 1);
+							setCookie('compare_data', src, 1);
+
+							var url = 'http://' + window.location.host + '/url_list';
+							window.open(url, "_blank");
 						});
-
-
 
 						for (var i = 0; i < castData.length; i++) {
 							var test = "<li id=" + "cp" + i + ">" + castData[i].url + " <b><span style=" + '"padding-left: 50px; color:#FF0000;"' + ">"
 								+ castData[i].match + "</span></b>" + " <b><span style=" + '"padding-left: 50px; padding-right:50px; color:#46E956;"' + ">"
 								+ castData[i].percentage + "%" + "</span></b> <button type=" + '"button"' + " class=" + '"btn btn-primary"'
-								+ " data-toggle=" + '"modal"' + " data-target=" + '"#modalCenter"' + "id=" + "complete_" + i +  ">Show URL</button></li>"
+								+ " data-toggle=" + '"modal"' + " data-target=" + '"#modalCenter"' + "id=" + "complete_" + i + ">Show URL</button></li>"
 
 							if (i < 10) {
 								$('#completeListfirst').append(test);
@@ -287,53 +244,30 @@
 							}
 						}
 
-						// Request from complete set
-						$("[id*='complete']").click(function(e){
+						$("[id*='complete']").click(function (e) {
 							e.preventDefault();
 							var number = $(this).attr('id').split('_').pop(); //Geting the number for upload episode
-                			var src = $('#cp' + number).text().split(" ")[0];
-                			
-                			if( src == "" ){
-			                  	alert("Data couldn't be extracted from button clicking, Possible ID Not Found Error");
-			                  return false;
-			                }
-			                getDataReq($("#insearch").val(),src,e);
+							var src = $('#cp' + number).text().split(" ")[0];
 
+							if (src == "") {
+								alert("Data couldn't be extracted from button clicking, Possible ID Not Found Error");
+								return false;
+							}
+							setCookie('key_data', $("#insearch").val(), 1);
+							setCookie('compare_data', src, 1);
+
+							var url = 'http://' + window.location.host + '/url_list';
+							window.open(url, "_blank");
 						});
-
-
 					}
 					else {
 						alert("Sorry, No Key Found")
 					}
-
-					// $("#insearch").val("");
 				},
 				error: function () {
 					alert("No Data");
 				}
 			});
-
-
-
-
-			// $('#modalCenter').on('show.bs.modal', function (event) {
-				
-			// 	var compare_key = $("#top10data")[0].val();
-			// 	console.log(compare_key);
-
-			// 	// $.ajax({
-			// 	// 	type: 'GET',
-			// 	// 	url: '/search',
-			// 	// 	data: {
-			// 	// 		'search_key': $("#insearch").val(),
-			// 	// 		'compare_key': $("#top10data")[]
-			// 	// 	}
-			// 	// })
-
-			// 	var myHeading = "<ol><li>I Fuck Your System</li><li>I Fuck Your System</li><li>I Fuck Your System</li><li>I Fuck Your System</li><li>I Fuck Your System</li><li>I Fuck Your System</li></ol>";
-			// 	$("#modal-body").html(myHeading);
-			// });
 		});
 	});
 
