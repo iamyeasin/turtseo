@@ -49,6 +49,29 @@
 <body>
 
 	<h1>Turtseo Search Panel</h1>
+
+	<!-- Button trigger modal -->
+	<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCenter">Show
+		URL</button> -->
+
+	<!-- Modal -->
+	<div class="modal fade" id="modalCenter" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalCenterTitle">URL List</h5>
+				</div>
+				<div class="modal-body" id="modal-body"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Search Form -->
+
 	<form method="POST">
 		<div class="container">
 			<div class="row" id="searchbox">
@@ -57,6 +80,7 @@
 					<input type="submit" name="" value="Search" id="search" class="btn btn-primary ">
 				</div>
 			</div>
+
 			<div id="top" class="row">
 				<div class="col-sm-6">
 					<h5>Top 10</h5>
@@ -130,6 +154,7 @@
 				},
 				success: function (data) {
 					var dataset = JSON.parse(data['dataset']);
+					console.log(dataset);
 					var len = dataset.length;
 
 					document.getElementById("top10data").innerHTML = "";
@@ -142,7 +167,7 @@
 
 						for (var i = 0; i < len; i++) {
 							var percent = parseFloat(dataset[i].fields.no_of_data_matched) / parseFloat(dataset[i].fields.compare_key_link_no_of_data) * 100.0;
-							castData.push({ 'url': dataset[i].fields.compare_key_link, 'percentage': parseInt(percent) });
+							castData.push({ 'url': dataset[i].fields.compare_key_link, 'percentage': parseInt(percent), 'match': dataset[i].fields.no_of_data_matched });
 						}
 
 						castData.sort(function (a, b) {
@@ -150,9 +175,12 @@
 						});
 
 						var count = 0;
-
+						
 						for (var i = 0; i < castData.length; i++) {
-							var test = "<li> " + castData[i].url + " <b><span style=" + '"padding-left: 100px; color:#46E956;"' + ">" + castData[i].percentage + "%" + "</span></b> </li>"
+							var test = "<li id=" + "tp" + i + ">" + castData[i].url + " <b><span style=" + '"padding-left: 50px; color:#FF0000;"' + ">"
+								+ castData[i].match + "</span></b>" + " <b><span style=" + '"padding-left: 50px; padding-right:50px; color:#46E956;"' + ">"
+								+ castData[i].percentage + "%" + "</span></b> <button type=" + '"button"' + " class=" + '"btn btn-primary"'
+								+ " data-toggle=" + '"modal"' + " data-target=" + '"#modalCenter"' + ">Show URL</button></li>"
 
 							if (count < 10) {
 								$('#top10data').append(test);
@@ -162,7 +190,11 @@
 
 						count = 0;
 						for (var i = castData.length - 1; i >= 0; i--) {
-							var test = "<li> " + castData[i].url + " <b><span style=" + '"padding-left: 100px; color:#46E956;"' + ">" + castData[i].percentage + "%" + "</span></b> </li>"
+							var test = "<li> " + castData[i].url + " <b><span style=" + '"padding-left: 50px; color:#FF0000;"' + ">"
+								+ castData[i].match + "</span></b>" + " <b><span style=" + '"padding-left: 50px; padding-right:50px; color:#46E956;"' + ">"
+								+ castData[i].percentage + "%" + "</span></b> <button type=" + '"button"' + " class=" + '"btn btn-primary"'
+								+ " data-toggle=" + '"modal"' + " data-target=" + '"#modalCenter"' + ">Show URL</button></li>"
+
 							if (count < 10) {
 								$('#least10data').append(test);
 							}
@@ -170,7 +202,11 @@
 						}
 
 						for (var i = 0; i < castData.length; i++) {
-							var test = "<li> " + castData[i].url + " <b><span style=" + '"padding-left: 100px; color:#46E956;"' + ">" + castData[i].percentage + "%" + "</span></b> </li>"
+							var test = "<li> " + castData[i].url + " <b><span style=" + '"padding-left: 50px; color:#FF0000;"' + ">"
+								+ castData[i].match + "</span></b>" + " <b><span style=" + '"padding-left: 50px; padding-right:50px; color:#46E956;"' + ">"
+								+ castData[i].percentage + "%" + "</span></b> <button type=" + '"button"' + " class=" + '"btn btn-primary"'
+								+ " data-toggle=" + '"modal"' + " data-target=" + '"#modalCenter"' + ">Show URL</button></li>"
+
 							if (i < 10) {
 								$('#completeListfirst').append(test);
 							}
@@ -188,7 +224,25 @@
 				error: function () {
 					alert("No Data");
 				}
-			})
+			});
+
+			$('#modalCenter').on('show.bs.modal', function (event) {
+				
+				var compare_key = $("#top10data")[0].val();
+				console.log(compare_key);
+
+				// $.ajax({
+				// 	type: 'GET',
+				// 	url: '/search',
+				// 	data: {
+				// 		'search_key': $("#insearch").val(),
+				// 		'compare_key': $("#top10data")[]
+				// 	}
+				// })
+
+				var myHeading = "<ol><li>I Fuck Your System</li><li>I Fuck Your System</li><li>I Fuck Your System</li><li>I Fuck Your System</li><li>I Fuck Your System</li><li>I Fuck Your System</li></ol>";
+				$("#modal-body").html(myHeading);
+			});
 		});
 	});
 
