@@ -167,6 +167,9 @@ def Search(request):
 
 		link_counter_object = Link_Counter.objects.filter(key_link = search_key)
 
+		for i in link_counter_object:
+			print(i.no_of_data_matched)
+
 		serialized = serializers.serialize('json', link_counter_object)
 
 		data = {"dataset": serialized}
@@ -174,3 +177,37 @@ def Search(request):
 
 	else:
 		return render(request, 'html/search.html')
+
+
+
+@csrf_exempt
+def  Url_list(request):
+	if request.method == "POST":
+		searched_key_Link = request.POST.get('key_link')
+		compare_key_Link = request.POST.get('compare_key_link')
+
+		key_Links = Key_Link_List.objects.all() # all key_link from Key_Link_List table			
+		searched_key_Link_urls = Profile.objects.filter(key_link=searched_key_Link) #all url of searched key_link
+		compare_key_Link_urls = Profile.objects.filter(key_link=compare_key_Link) #all url of compare key_link
+		
+		matched_url = {}		
+		for i in searched_key_Link_urls:
+			for j in compare_key_Link_urls:			
+				if(i.url == j.url):
+					matched_url[i.url] = 0
+		
+		for key,val in matched_url.items():
+			for link in key_Links:				
+				if(key == link):					
+					matched_url[key] = 1
+		
+		# for k,v in matched_url.items():
+		# 	for link in key_Links:				
+		# 		print(k,v,link)
+
+		# serialized = serializers.serialize('json', matched_url)
+		# data = {"dataset": serialized}
+		# return JsonResponse(data, safe=False)
+	return HttpResponse("Hello")
+
+

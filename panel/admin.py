@@ -16,7 +16,7 @@ class Key_Link_Counter(admin.ModelAdmin):
 class ProfileAdmin(admin.ModelAdmin):
 	list_display = ('key_link','url','domanin_rank')
 	list_display_links = ('key_link','url')
-	search_fields = ('key_link','url')
+	search_fields = ["url"]
 	list_per_page = 30
 
 class Profile_ExtendedAdmin(admin.ModelAdmin):
