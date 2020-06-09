@@ -29,7 +29,7 @@ class Column_Set(models.Model):
 
 class Profile(models.Model):
     key_link = models.ForeignKey(Key_Link_List, on_delete=models.CASCADE)
-    url = models.URLField()
+    url = models.CharField(max_length=500, default="")
     domanin_rank = models.IntegerField()
 
 

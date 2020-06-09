@@ -5,7 +5,7 @@ from . models import *
 from . import methods
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
-from urllib import parse
+# from urllib import parse
 import json
 
 @csrf_exempt
@@ -64,6 +64,8 @@ def  Search_Url_list(request):
 	if request.method == "POST":
 		searched_key_Link = request.POST.get('key_data')
 		compare_key_Link = request.POST.get('compare_data')
+		print(searched_key_Link)
+		print(compare_key_Link)
 
 		key_Links = Key_Link_List.objects.all() # all key_link from Key_Link_List table			
 		searched_key_Link_urls = Profile.objects.filter(key_link=searched_key_Link) #all url of searched key_link
@@ -75,18 +77,16 @@ def  Search_Url_list(request):
 				if(i.url == j.url):
 					matched_url[i.url] = 0
 		
-		for key,val in matched_url.items():
-			x = parse.urlsplit(key)			
-			for link in key_Links:					
-				if(str(x.netloc) == str(link)):			
+		for key,val in matched_url.items():						
+			for link in key_Links:													
+				if(str(key) == str(link)): 
 					matched_url[key] = 1
 		
-		# for k,v in matched_url.items():	
-		# 	print(k,v)
-
-		serialized = serializers.serialize('json', matched_url)
-		url_data = {"url_dataset": serialized}
+		for k,v in matched_url.items():
+			print(k,v)
+		
+		url_data = json.dumps({ 'url_list' : matched_url})
 		return JsonResponse(url_data, safe=False)
 
 	else:
-		return render(request, 'html/search.html')
+		return render(request, 'html/search.html')		
