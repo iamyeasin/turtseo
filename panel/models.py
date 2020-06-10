@@ -44,3 +44,15 @@ class Profile_Extended(models.Model):
     email = models.EmailField()
     niche = models.CharField(max_length=500)
 
+class DirectoryName(models.Model):
+    directory_name = models.CharField(max_length=500, unique=True, primary_key = True)
+
+    def __str__(self):
+        return self.directory_name
+
+    def delete(self):
+        return DirectoryName.objects.all().delete()
+
+class DirectoryItem(models.Model):
+    directory_name = models.ForeignKey(DirectoryName, on_delete=models.CASCADE)
+    key_link = models.CharField(max_length=500, default="")

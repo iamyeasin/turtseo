@@ -48,12 +48,9 @@ def Search(request):
 		# Foreign Key
 		link_counter_object = Link_Counter.objects.filter(key_link = search_key)
 
-		# for i in link_counter_object:
-		# 	print(i.no_of_data_matched)
-
 		serialized = serializers.serialize('json', link_counter_object)
-
 		data = {"dataset": serialized}
+
 		return JsonResponse(data, safe=False)
 	else:
 		return render(request, 'html/search.html')
@@ -90,7 +87,72 @@ def Search_Url_list(request):
 
 @csrf_exempt
 def Directory(request):
+
 	if request.method == "POST":
-		print("post")
-		# create_dir = request.POST.get('')
-		return render(request, 'html/directory.html')	
+		btnpressed = request.POST.get('btnpressed')
+
+		# Directory Name Model
+		if(btnpressed == 'createdir'):
+			dirname = request.POST.get('dirname')
+
+			directory_name_model = DirectoryName(
+				directory_name = dirname
+			)
+			directory_name_model.save()
+
+			directory_name_foreign_key = DirectoryName.objects.get(directory_name = dirname)
+
+			directory_item = DirectoryItem(
+				directory_name = directory_name_foreign_key,
+				key_link = "Facebook.com"
+			)
+			directory_item.save()
+
+			directory_item = DirectoryItem(
+				directory_name = directory_name_foreign_key,
+				key_link = "Google.com"
+			)
+			directory_item.save()
+
+			return render(request, 'html/directory.html')
+
+		# Search Directory
+		elif btnpressed == 'search':
+			searchdir = request.POST.get('searchdir')
+
+			if( DirectoryName.objects.filter(directory_name = searchdir).count() == 1):
+				
+				linked_key_list = DirectoryItem.objects.filter(directory_name = searchdir)
+				serialized = serializers.serialize('json', linked_key_list)
+				
+				data = {"dataset": serialized}
+				return JsonResponse(data, safe=False)
+			else:
+				return HttpResponseNotFound("No Directory Found")
+
+		elif btnpressed == "initial":
+			key_link_list = Key_Link_List.objects.all()
+			serialized = serializers.serialize('json', key_link_list)
+			
+			data = {"dataset": serialized}
+			return JsonResponse(data, safe=False)
+
+		else:
+			search_key_text = request.POST.get('search_key_text')
+
+			# key_link_list_object = Key_Link_List.objects.filter(key_link = search_key_text)
+
+			if(Key_Link_List.objects.filter(key_link = search_key_text).count() == 1):
+				key_link_list = Key_Link_List.objects.filter(key_link = search_key_text)
+
+				serialized = serializers.serialize('json', key_link_list)
+				
+				data = {"dataset": serialized}
+				return JsonResponse(data, safe=False)
+
+			else:
+				HttpResponseNotFound("No Link Found")
+				
+	
+	else:
+		return render(request, 'html/directory.html')

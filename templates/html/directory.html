@@ -67,18 +67,18 @@
 				<div class="form-group col-sm-4">
 					<input type="submit" id="createdir" class="btn btn-primary" value="Create Directory">
 				</div>
-			</div>	
+			</div>
 		</div>
 	</form>
 	<hr>
 	<form method="POST" id="form-2">
-		<div class = "container form-group">
+		<div class="container form-group">
 			<div class="form-group row pt-5">
 				<div class="col-sm-8">
 					<input type="text" name="" placeholder="Search Directory" class="form-control" id="searchdir">
 				</div>
 				<div class="col-sm-2">
-					<input type="submit" name="" value="Search" class="btn-primary form-control">
+					<input id="search" type="submit" name="" value="Search" class="btn-primary form-control">
 				</div>
 			</div>
 			<div class="row pt-3 pb-2  pl-3">
@@ -86,44 +86,29 @@
 			</div>
 			<div class="row">
 				<div class="col-sm-6 pt-3">
-					<h4 id="setdir">Directory Name: Mysite</h4> <!-- use javascript inner.html  -->
+					<h4 id="setdir">Directory Name:</h4> <!-- use javascript inner.html  -->
 					<h4>Linked: </h4>
 					<ol>
-						<li>
-							<div class="row pl-3" id="linkedid_">
-							<p id="linkedp_" >www.xyz.com<a href="#" id="linkeddel_" value="www.xyz.com">&nbsp &nbsp &nbsp Delete Link</a></p>
-						</div>
-						</li>
-						<li>
-							<div class="row pl-3" id="linkedid_">
-							<p id="linkedp_" >www.xyz.com<a href="#" id="linkeddel_" value="www.xyz.com">&nbsp &nbsp &nbsp Delete Link</a></p>
-						</div>
-						</li>
+						<div id="delete_list"></div>
 					</ol>
 				</div>
-				<div class="col-sm-6 pt-5" >
+				<div class="col-sm-6 pt-5">
 					<div class="row">
 						<div class="col-sm-6">
-							<input type="text" name="" class="form-control" placeholder="Search Guest link" >	
+							<input id="search_key_text" type="text" name="" class="form-control"
+								placeholder="Search Guest link">
 						</div>
-						<div class="col-sm-3" >
-							<input type="submit" class= "form-control btn btn-primary" value="search">
+						<div class="col-sm-3">
+							<input id="search_key" type="submit" class="form-control btn btn-primary" value="search">
 						</div>
 					</div>
-					<hr>
-					<div class="row pl-3" id="guestid_">
-						<p id="guestp_" >www.xyz.com<a href="#" id="guestadd_" value="www.xyz.com">&nbsp &nbsp &nbsp Add Link</a></p>
+					<div class="row">
+						<ol>
+							<div id="add_list"></div>
+							<!-- <li>Google.com <button style="margin-left: 50px;" type="button" class="btn btn-primary">ADD</button></li>
+							<li>Google.com <button style="margin-left: 50px;" type="button" class="btn btn-primary">ADD</button></li> -->
+						</ol>
 					</div>
-					<hr>
-					<div class="row pl-3" id="guestid_">
-						<p id="guestp_" >www.xyz.com<a href="#" id="guestadd_" value="www.xyz.com">&nbsp &nbsp &nbsp Add Link</a></p>
-					</div>
-					<hr>
-					<div class="row pl-3" id="guestid_">
-						<p id="guestp_" >www.xyz.com<a href="#" id="guestadd_" value="www.xyz.com">&nbsp &nbsp &nbsp Add Link</a></p>
-					</div>
-					<hr>
-
 				</div>
 			</div>
 		</div>
@@ -135,8 +120,137 @@
 <script>
 
 	$(document).ready(function (e) {
-		
-			
+
+		// Initial Loading all Key Link in HTML
+		$.ajax({
+			type: 'POST',
+			url: '/directory',
+			data: {
+				'btnpressed': "initial"
+			},
+			success: function (data) {
+				var dataset = JSON.parse(data['dataset']);
+				console.log("ADD Data", dataset);
+
+				// <b style="padding-left: 50px;"></b>
+
+				for (var i = 0; i < dataset.length; i++) {
+					var str = "<li id=" + "addlink_" + i + ">" + dataset[i].pk + "<button style=" + '"margin-left: 50px;"' + " type=" + '"button"' + " class="
+						+ '"btn btn-primary"' + " id=" + "guestadd_" + i + ">ADD</button></li>";
+					$('#add_list').append(str);
+				}
+			},
+			error: function () {
+				alert("Data Pai nai");
+			}
+		})
+
+		// Create Directory
+		$("#createdir").click(function (e) {
+			e.preventDefault();
+
+			if ($('#dirname').val() === "") {
+				alert("Directory Name can't be Empty")
+			}
+			else {
+				$.ajax({
+					type: 'POST',
+					url: '/directory',
+					data: {
+						'dirname': $('#dirname').val(),
+						'btnpressed': "createdir"
+					},
+					success: function (e) {
+						alert("Directory Created Successfully");
+						$('#form')[0].reset();
+					},
+					error: function () {
+						alert("Sorry, Directory isn't created");
+					}
+				});
+			}
+		});
+
+		// Search Directory
+		$("#search").click(function (e) {
+			e.preventDefault();
+
+			document.getElementById("delete_list").innerHTML = "";
+
+			$.ajax({
+				type: 'POST',
+				url: '/directory',
+				data: {
+					'searchdir': $('#searchdir').val(),
+					'btnpressed': "search"
+				},
+				success: function (data) {
+					var dataset = JSON.parse(data['dataset']);
+					console.log(dataset);
+
+					$('#setdir').text("Directory Name: " + $('#searchdir').val())
+					$('#searchdir').val("")
+
+					for (var i = 0; i < dataset.length; i++) {
+						var str = "<li><div class=" + '"row pl-3"' + " id=" + '"linkedid_"' + "><p id=" + '"linkedp_"' + ">" + dataset[i].fields.key_link + "</p><a style="
+							+ '"padding-left: 50px;"' + " href=" + '"#"' + " id=" + '"linkeddel_"' + ">Delete Link</a>";
+
+						$('#delete_list').append(str);
+					}
+				},
+				error: function () {
+					alert("Data Pai nai");
+				}
+			})
+		})
+
+		// Search Specific Key Link for Directory
+		$("#search_key").click(function (e) {
+			e.preventDefault();
+
+			document.getElementById("add_list").innerHTML = "";
+
+			$.ajax({
+				type: 'POST',
+				url: '/directory',
+				data: {
+					'search_key_text': $('#search_key_text').val(),
+					'btnpressed': "search_key"
+				},
+				success: function (data) {
+					var dataset = JSON.parse(data['dataset']);
+					console.log("ADD Data", dataset);
+
+					for (var i = 0; i < dataset.length; i++) {
+						var str = "<li id=" + "addlink_" + i + ">" + dataset[i].pk + "<button style=" + '"margin-left: 50px;"' + " type=" + '"button"' + " class="
+							+ '"btn btn-primary"' + " id=" + "guestadd_" + i + ">ADD</button></li>";
+
+						$('#add_list').append(str);
+					}
+				},
+				error: function () {
+					alert("Data Pai nai");
+				}
+			})
+		})
+
+		$("[id*='guestadd']").click(function (e) {
+			e.preventDefault();
+
+			console.log("ABCD");
+			var number = $(this).attr('id').split('_').pop(); //Geting the number for upload episode
+			var src = $('#addlink_' + number).text().split(" ")[0];
+
+			if (src == "") {
+				alert("Data couldn't be extracted from button clicking, Possible ID Not Found Error");
+				return false;
+			}
+			setCookie('key_data', $("#insearch").val(), 1);
+			setCookie('compare_data', src, 1);
+
+			var url = 'http://' + window.location.host + '/url_list';
+			window.open(url, "_blank");
+		});
 	});
 
 </script>
