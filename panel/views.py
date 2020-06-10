@@ -86,3 +86,11 @@ def Search_Url_list(request):
 
 	else:
 		return render(request, 'html/url_list.html')
+
+
+@csrf_exempt
+def Directory(request):
+	if request.method == "POST":
+		print("post")
+		# create_dir = request.POST.get('')
+		return render(request, 'html/directory.html')	
