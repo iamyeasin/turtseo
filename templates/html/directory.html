@@ -92,7 +92,7 @@
 						<div id="delete_list"></div>
 					</ol>
 				</div>
-				<div class="col-sm-6 pt-5">
+				<div class="col-sm-6 pt-5" id="add_list">
 					<div class="row">
 						<div class="col-sm-6">
 							<input id="search_key_text" type="text" name="" class="form-control"
@@ -102,13 +102,20 @@
 							<input id="search_key" type="submit" class="form-control btn btn-primary" value="search">
 						</div>
 					</div>
-					<div class="row">
+					<div class="row pt-5 pl-2">
+						<!-- <div class="col-sm-6">
+							<p>www.stickerdriver.com</p>
+						</div>
+
+						<div class="col-sm-6">
+							<input type="submit" name="" id="addbtn_" value="Add Link" class="btn btn-light p-" >
+						</div>
 						<ol>
 							<div id="add_list"></div>
-							<!-- <li>Google.com <button style="margin-left: 50px;" type="button" class="btn btn-primary">ADD</button></li>
-							<li>Google.com <button style="margin-left: 50px;" type="button" class="btn btn-primary">ADD</button></li> -->
+							<li>Google.com <button style="margin-left: 50px;" type="button" class="btn btn-primary">ADD</button></li>
+							<li>Google.com <button style="margin-left: 50px;" type="button" class="btn btn-primary">ADD</button></li>
 						</ol>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -122,6 +129,33 @@
 	$(document).ready(function (e) {
 
 		// Initial Loading all Key Link in HTML
+
+		var searchFoundDir = "";
+
+		// Add link from guestpostlinkdir
+
+		function addLinkToDirectoy( guestlink ){
+			$.ajax({
+				type: 'POST',
+				url : '/directory',
+				data: {
+					'btnpressed': "addlinktodir",
+					'url' : guestlink,
+					'dirname' : searchFoundDir
+				},
+				success: function(data){
+					alert("Link added to directory");
+					$("#refresh").click()
+				},
+				error: function(data){
+					alert("Link Adding failed")
+				}
+
+			});
+		}
+
+
+		// Initial Loads of all directory
 		$.ajax({
 			type: 'POST',
 			url: '/directory',
@@ -135,10 +169,37 @@
 				// <b style="padding-left: 50px;"></b>
 
 				for (var i = 0; i < dataset.length; i++) {
-					var str = "<li id=" + "addlink_" + i + ">" + dataset[i].pk + "<button style=" + '"margin-left: 50px;"' + " type=" + '"button"' + " class="
-						+ '"btn btn-primary"' + " id=" + "guestadd_" + i + ">ADD</button></li>";
-					$('#add_list').append(str);
+					// var str = "<li id=" + "addlink_" + i + ">" + dataset[i].pk + "<button style=" + '"margin-left: 50px;"' + " type=" + '"button"' + " class="
+					// 	+ '"btn btn-primary"' + " id=" + "guestadd_" + i + ">ADD</button></li>";
+					var addLink = '<hr><div class="row pt-2 pl-2" id="rowid_'+i+'">'
+						+	'<div class="col-sm-6">'
+						+ '<a id="addlink_'+ i +'" href="#"> '+ dataset[i].pk + '</a>'
+						+  '</div>' 
+						+ 	'<div class="col-sm-6">'
+						+		'<input type="submit" name="" id="guestadd_'+ i +'" value="Add Link" class="btn btn-light p-">'
+						+ 	'</div>'
+						+ '</div>'
+					$('#add_list').append(addLink);
 				}
+
+				// Send hits to background to a link 
+
+				$("[id*='guestadd_']").click(function (e) {
+						e.preventDefault();
+
+						console.log("ABCD");
+						var number = $(this).attr('id').split('_').pop(); //Geting the number for upload episode
+						var src = $('#addlink_' + number).text();
+
+						if (src == "") {
+							alert("Couldn't grab the link");
+							return false;
+						}
+						
+						addLinkToDirectoy(src);
+
+
+					});
 			},
 			error: function () {
 				alert("Data Pai nai");
@@ -171,11 +232,38 @@
 			}
 		});
 
-		// Search Directory
-		$("#search").click(function (e) {
-			e.preventDefault();
 
-			document.getElementById("delete_list").innerHTML = "";
+
+		// generate related directory
+
+		function delLinkToDirectoy( guestlink ){
+
+			alert("Bainchod" + guestlink + " " + searchFoundDir)
+
+				$.ajax({
+					type: 'POST',
+					url : '/directory',
+					data: {
+						'btnpressed': "delLinktodir",
+						'url' : guestlink,
+						'dirname' : searchFoundDir
+					},
+					success: function(data){
+						alert("Link Deleted from directory");
+						$("#refresh").click();
+
+					},
+					error: function(data){
+						alert("Link Deleting Failed")
+					}
+
+				});
+			}
+
+
+
+		function genDirLink(){
+			// document.getElementById("delete_list").innerHTML = "";
 
 			$.ajax({
 				type: 'POST',
@@ -186,28 +274,67 @@
 				},
 				success: function (data) {
 					var dataset = JSON.parse(data['dataset']);
-					console.log(dataset);
+					//console.log(dataset);
+					searchFoundDir = $('#searchdir').val();
 
 					$('#setdir').text("Directory Name: " + $('#searchdir').val())
-					$('#searchdir').val("")
+					$("[id*='rowiddir_']").remove();
 
 					for (var i = 0; i < dataset.length; i++) {
-						var str = "<li><div class=" + '"row pl-3"' + " id=" + '"linkedid_"' + "><p id=" + '"linkedp_"' + ">" + dataset[i].fields.key_link + "</p><a style="
-							+ '"padding-left: 50px;"' + " href=" + '"#"' + " id=" + '"linkeddel_"' + ">Delete Link</a>";
+						// var str = "<li><div class=" + '"row pl-3"' + " id=" + '"linkedid_ '+i+'" '+"><p id=" + '"linkedp_"' + ">" + dataset[i].fields.key_link + "</p><a style="
+						// 	+ '"padding-left: 50px;"' + " href=" + '"#"' + " id=" + '"linkeddel_"' + ">Delete Link</a>";
+						var addLink = '<div class="row pt-2 pl-2" id="rowiddir_'+i+'">'
+						+	'<div class="col-sm-6">'
+						+  (i+1) + '. <a id="linkedid_'+ i +'" href="#"> '+ dataset[i].fields.key_link + '</a>'
+						+  '</div>' 
+						+ 	'<div class="col-sm-6">'
+						+		'<input type="submit" name="" id="linkeddel_'+ i +'" value="Delete" class="btn btn-danger p-">'
+						+ 	'</div>'
+						+ '</div>'
 
-						$('#delete_list').append(str);
+
+						$('#delete_list').append(addLink);
 					}
+
+					$("[id*='linkeddel_']").click(function (e) {
+						e.preventDefault();
+
+						
+						var number = $(this).attr('id').split('_').pop(); //Geting the number for upload episode
+						var src = $('#linkedid_' + number).text();
+						console.log(src);
+
+						if (src == "") {
+							alert("Couldn't grab the link");
+							return false;
+						}
+						
+						delLinkToDirectoy(src);
+					});
 				},
 				error: function () {
-					alert("Data Pai nai");
+					alert("Directory Not Found!");
 				}
 			})
+		}
+
+		$("#search").click(function (e) {
+			e.preventDefault();
+			genDirLink();
+			
 		})
 
-		// Search Specific Key Link for Directory
-		$("#search_key").click(function (e) {
-			e.preventDefault();
 
+		// Refresh Current Directory
+		$("#refresh").click(function (e) {
+			e.preventDefault();
+			genDirLink();
+			
+		})
+		
+
+		// // Search Specific Key Link for Directory
+		function test2(){
 			document.getElementById("add_list").innerHTML = "";
 
 			$.ajax({
@@ -227,30 +354,25 @@
 
 						$('#add_list').append(str);
 					}
+
+
 				},
 				error: function () {
 					alert("Data Pai nai");
 				}
 			})
+		}
+
+
+		$("#search_key").click(function (e) {
+			e.preventDefault();
+			test2();
 		})
 
-		$("[id*='guestadd']").click(function (e) {
-			e.preventDefault();
 
-			console.log("ABCD");
-			var number = $(this).attr('id').split('_').pop(); //Geting the number for upload episode
-			var src = $('#addlink_' + number).text().split(" ")[0];
+		
 
-			if (src == "") {
-				alert("Data couldn't be extracted from button clicking, Possible ID Not Found Error");
-				return false;
-			}
-			setCookie('key_data', $("#insearch").val(), 1);
-			setCookie('compare_data', src, 1);
 
-			var url = 'http://' + window.location.host + '/url_list';
-			window.open(url, "_blank");
-		});
 	});
 
 </script>

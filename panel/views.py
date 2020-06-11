@@ -91,8 +91,50 @@ def Directory(request):
 	if request.method == "POST":
 		btnpressed = request.POST.get('btnpressed')
 
+		# Delete directoy
+		if(btnpressed == "delLinktodir"):
+			try:
+				dirname = request.POST.get('dirname')
+				guestlink = request.POST.get('url')
+				# print("drl " ,dirname , guestlink)
+
+				# directory_name_model = DirectoryName(
+				# 	directory_name = dirname
+				# )
+
+				# directory_name_foreign_key = DirectoryName.objects.get(directory_name = dirname)
+				DirectoryName.objects.filter(directory_name=dirname , key_link=guestlink).delete()
+				return HttpResponse("Delete Completed")
+			except:
+				return HttpResponse("Delete Operation couldn't Complete")
+
+
+		# Add new directory to previous directory
+		elif( btnpressed == 'addlinktodir' ):
+			try:
+				dirname = request.POST.get('dirname')
+				guestlink = request.POST.get('url')
+
+				directory_name_model = DirectoryName(
+					directory_name = dirname
+				)
+				directory_name_foreign_key = DirectoryName.objects.get(directory_name = dirname)
+
+				directory_item = DirectoryItem(
+					directory_name = directory_name_foreign_key,
+					key_link = guestlink
+				)
+				
+				directory_item.save()
+				return HttpResponse("Saved the data")
+
+			except Exception as e:
+				return HttpResponse(e)
+
+
+
 		# Directory Name Model
-		if(btnpressed == 'createdir'):
+		elif(btnpressed == 'createdir'):
 			dirname = request.POST.get('dirname')
 
 			directory_name_model = DirectoryName(
@@ -100,19 +142,19 @@ def Directory(request):
 			)
 			directory_name_model.save()
 
-			directory_name_foreign_key = DirectoryName.objects.get(directory_name = dirname)
+			# directory_name_foreign_key = DirectoryName.objects.get(directory_name = dirname)
 
-			directory_item = DirectoryItem(
-				directory_name = directory_name_foreign_key,
-				key_link = "Facebook.com"
-			)
-			directory_item.save()
+			# directory_item = DirectoryItem(
+			# 	directory_name = directory_name_foreign_key,
+			# 	key_link = "Facebook.com"
+			# )
+			# directory_item.save()
 
-			directory_item = DirectoryItem(
-				directory_name = directory_name_foreign_key,
-				key_link = "Google.com"
-			)
-			directory_item.save()
+			# directory_item = DirectoryItem(
+			# 	directory_name = directory_name_foreign_key,
+			# 	key_link = "Google.com"
+			# )
+			# directory_item.save()
 
 			return render(request, 'html/directory.html')
 
