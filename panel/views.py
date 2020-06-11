@@ -93,4 +93,4 @@ def Directory(request):
 	if request.method == "POST":
 		print("post")
 		# create_dir = request.POST.get('')
-		return render(request, 'html/directory.html')	
+		return render(request, 'html/directory.html')
