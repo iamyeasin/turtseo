@@ -94,8 +94,8 @@ def Directory(request):
 		# Delete directoy
 		if(btnpressed == "delLinktodir"):
 			try:
-				dirname = request.POST.get('dirname')
-				guestlink = request.POST.get('url')
+				dirname = request.POST.get('dirname').strip()
+				guestlink = request.POST.get('url').strip()
 				# print("drl " ,dirname , guestlink)
 
 				# directory_name_model = DirectoryName(
@@ -103,7 +103,7 @@ def Directory(request):
 				# )
 
 				# directory_name_foreign_key = DirectoryName.objects.get(directory_name = dirname)
-				DirectoryName.objects.filter(directory_name=dirname , key_link=guestlink).delete()
+				DirectoryItem.objects.filter(directory_name=dirname , key_link=guestlink).delete()
 				return HttpResponse("Delete Completed")
 			except:
 				return HttpResponse("Delete Operation couldn't Complete")
@@ -112,21 +112,35 @@ def Directory(request):
 		# Add new directory to previous directory
 		elif( btnpressed == 'addlinktodir' ):
 			try:
-				dirname = request.POST.get('dirname')
-				guestlink = request.POST.get('url')
+				dirname = request.POST.get('dirname').strip()
+				guestlink = request.POST.get('url').strip()
+
+
 
 				directory_name_model = DirectoryName(
 					directory_name = dirname
 				)
 				directory_name_foreign_key = DirectoryName.objects.get(directory_name = dirname)
 
-				directory_item = DirectoryItem(
-					directory_name = directory_name_foreign_key,
-					key_link = guestlink
-				)
-				
-				directory_item.save()
-				return HttpResponse("Saved the data")
+				isAvail = None
+
+				try:
+					isAvail = DirectoryItem.objects.get(directory_name=directory_name_foreign_key, key_link=guestlink)
+				except:
+					isAvail = None
+
+
+				if isAvail == None:
+					directory_item = DirectoryItem(
+						directory_name = directory_name_foreign_key,
+						key_link = guestlink
+					)
+					
+					directory_item.save()
+					return HttpResponse("Saved the data")
+				else:
+
+					return HttpResponseNotFound("Duplicate Entry exists")
 
 			except Exception as e:
 				return HttpResponse(e)
@@ -135,7 +149,7 @@ def Directory(request):
 
 		# Directory Name Model
 		elif(btnpressed == 'createdir'):
-			dirname = request.POST.get('dirname')
+			dirname = request.POST.get('dirname').strip()
 
 			directory_name_model = DirectoryName(
 				directory_name = dirname
@@ -160,7 +174,7 @@ def Directory(request):
 
 		# Search Directory
 		elif btnpressed == 'search':
-			searchdir = request.POST.get('searchdir')
+			searchdir =  request.POST.get('searchdir').strip()
 
 			if( DirectoryName.objects.filter(directory_name = searchdir).count() == 1):
 				
@@ -180,21 +194,33 @@ def Directory(request):
 			return JsonResponse(data, safe=False)
 
 		else:
-			search_key_text = request.POST.get('search_key_text')
+			searchres =  request.POST.get('search').strip()
+			print("what ?  ", searchres)
 
-			# key_link_list_object = Key_Link_List.objects.filter(key_link = search_key_text)
+			key_link_list_object = Key_Link_List.objects.filter(key_link = searchres)
 
-			if(Key_Link_List.objects.filter(key_link = search_key_text).count() == 1):
-				key_link_list = Key_Link_List.objects.filter(key_link = search_key_text)
+			query = None
 
-				serialized = serializers.serialize('json', key_link_list)
+			try:
+				query = Key_Link_List.objects.filter(key_link = searchres)
+			except:
+				query = None
+
+			if( query != None):
+				key_link_list = None
+				try:
+					key_link_list = Key_Link_List.objects.filter(key_link__contains = searchres)
+				except:
+					key_link_list = None
 				
-				data = {"dataset": serialized}
-				return JsonResponse(data, safe=False)
-
+				if key_link_list != None:
+					serialized = serializers.serialize('json', key_link_list)
+					data = {"dataset": serialized}
+					return JsonResponse(data, safe=False)
+				else:
+					return HttpResponseNotFound("No data found")
 			else:
 				HttpResponseNotFound("No Link Found")
 				
-	
 	else:
 		return render(request, 'html/directory.html')

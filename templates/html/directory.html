@@ -102,22 +102,9 @@
 							<input id="search_key" type="submit" class="form-control btn btn-primary" value="search">
 						</div>
 					</div>
-					<div class="row pt-5 pl-2">
-						<!-- <div class="col-sm-6">
-							<p>www.stickerdriver.com</p>
-						</div>
-
-						<div class="col-sm-6">
-							<input type="submit" name="" id="addbtn_" value="Add Link" class="btn btn-light p-" >
-						</div>
-						<ol>
-							<div id="add_list"></div>
-							<li>Google.com <button style="margin-left: 50px;" type="button" class="btn btn-primary">ADD</button></li>
-							<li>Google.com <button style="margin-left: 50px;" type="button" class="btn btn-primary">ADD</button></li>
-						</ol>
-					</div> -->
-				</div>
+					<div class="" id="wholelist"></div>
 			</div>
+			
 		</div>
 	</form>
 
@@ -171,7 +158,7 @@
 				for (var i = 0; i < dataset.length; i++) {
 					// var str = "<li id=" + "addlink_" + i + ">" + dataset[i].pk + "<button style=" + '"margin-left: 50px;"' + " type=" + '"button"' + " class="
 					// 	+ '"btn btn-primary"' + " id=" + "guestadd_" + i + ">ADD</button></li>";
-					var addLink = '<hr><div class="row pt-2 pl-2" id="rowid_'+i+'">'
+					var addLink = '<div class="row pt-2 pl-2" id="rowid_'+i+'">'
 						+	'<div class="col-sm-6">'
 						+ '<a id="addlink_'+ i +'" href="#"> '+ dataset[i].pk + '</a>'
 						+  '</div>' 
@@ -179,7 +166,7 @@
 						+		'<input type="submit" name="" id="guestadd_'+ i +'" value="Add Link" class="btn btn-light p-">'
 						+ 	'</div>'
 						+ '</div>'
-					$('#add_list').append(addLink);
+					$('#wholelist').append(addLink);
 				}
 
 				// Send hits to background to a link 
@@ -196,7 +183,12 @@
 							return false;
 						}
 						
-						addLinkToDirectoy(src);
+						if($("#searchdir").val() ) {
+							addLinkToDirectoy(src);
+						}
+						else{
+							alert("First select a Directory");
+						}
 
 
 					});
@@ -237,8 +229,7 @@
 		// generate related directory
 
 		function delLinkToDirectoy( guestlink ){
-
-			alert("Bainchod" + guestlink + " " + searchFoundDir)
+			// alert("Bainchod" + guestlink + " " + searchFoundDir)
 
 				$.ajax({
 					type: 'POST',
@@ -256,7 +247,6 @@
 					error: function(data){
 						alert("Link Deleting Failed")
 					}
-
 				});
 			}
 
@@ -332,43 +322,76 @@
 			
 		})
 		
-
-		// // Search Specific Key Link for Directory
-		function test2(){
-			document.getElementById("add_list").innerHTML = "";
-
+		// Search data via typing
+		function sendHit( query ){
+			$('#wholelist').toggle();
+			console.log( query )
 			$.ajax({
 				type: 'POST',
 				url: '/directory',
 				data: {
-					'search_key_text': $('#search_key_text').val(),
-					'btnpressed': "search_key"
+					'search' : query+"",
+					'btnpressed' : "search_key"
 				},
-				success: function (data) {
+				success: function(data){
+					$("[id*='rowid_']").remove();
 					var dataset = JSON.parse(data['dataset']);
-					console.log("ADD Data", dataset);
-
+					console.log("Found", dataset);
 					for (var i = 0; i < dataset.length; i++) {
-						var str = "<li id=" + "addlink_" + i + ">" + dataset[i].pk + "<button style=" + '"margin-left: 50px;"' + " type=" + '"button"' + " class="
-							+ '"btn btn-primary"' + " id=" + "guestadd_" + i + ">ADD</button></li>";
+						var addLink = '<div class="row pt-2 pl-2" id="rowid_'+i+'">'
+						+	'<div class="col-sm-6">'
+						+ '<a id="addlink_'+ i +'" href="#"> '+ dataset[i].pk + '</a>'
+						+  '</div>' 
+						+ 	'<div class="col-sm-6">'
+						+		'<input type="submit" id="guestadd_'+ i +'" value="Add Link" class="btn btn-light p-">'
+						+ 	'</div>'
+						+ '</div>'
+					$('#wholelist').append(addLink);
 
-						$('#add_list').append(str);
 					}
 
+					$("[id*='guestadd_']").click(function (e) {
+						e.preventDefault();
 
+						// console.log("ABCD");
+						var number = $(this).attr('id').split('_').pop(); //Geting the number for upload episode
+						var src = $('#addlink_' + number).text();
+						// alert(src)
+
+						if (src == "") {
+							alert("Couldn't grab the link");
+							return false;
+						}
+
+						if($("#searchdir").val() ) {
+							addLinkToDirectoy(src);
+						}
+						else{
+							alert("First select a Directory");
+						}
+
+						
+
+
+					});
 				},
 				error: function () {
 					alert("Data Pai nai");
 				}
+				
+
 			})
 		}
 
 
-		$("#search_key").click(function (e) {
-			e.preventDefault();
-			test2();
-		})
+		$('#search_key_text').on("input", function(){
+			var query = $("#search_key_text").val();
 
+			if( query ){
+				sendHit(query);	
+			}
+
+		});
 
 		
 
