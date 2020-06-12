@@ -336,7 +336,7 @@
 				success: function(data){
 					$("[id*='rowid_']").remove();
 					var dataset = JSON.parse(data['dataset']);
-					console.log("Found", dataset);
+					// console.log("Found", dataset);
 					for (var i = 0; i < dataset.length; i++) {
 						var addLink = '<div class="row pt-2 pl-2" id="rowid_'+i+'">'
 						+	'<div class="col-sm-6">'
