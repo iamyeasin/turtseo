@@ -6,31 +6,36 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 
 
+#save key_link in Key_Link_List model
 def Model_Key_Link_List_Save(key_link_name):
     key_link_list_model = Key_Link_List(
         key_link = key_link_name
     )
+
     key_link_list_model.save()
+
     return HttpResponse("OK")
 
 
+#save key_link with url & domanin_rank in Profile model
 def Model_Profile_Save(key_link_name, URLList, DRList):
     # All csv data save under POST key link given by USER
     key_link_list_foreign_key = Key_Link_List.objects.get(key_link=key_link_name)
     
     data_size = len(URLList)
-
     for i in range(data_size):
         profile = Profile(
             key_link = key_link_list_foreign_key,
             url = URLList[i],
             domanin_rank = DRList[i],
         )
+
         profile.save()
 
     return HttpResponse("OK")
 
 
+#calculating matched url with two key_link and stroing in the Link_Counter model
 def Model_Link_Counter_Save(key_link_name, URLList):
     # Foreign Key access
     key_link_list_foreign_key = Key_Link_List.objects.get(key_link=key_link_name)
@@ -65,7 +70,7 @@ def Model_Link_Counter_Save(key_link_name, URLList):
 
         # match with other key link in KEY LINK LIST Model
         for link in key_link_list_model_object:
-            key = link.key_link   							# Link Counter Model er key link
+            key = link.key_link   	# Link Counter Model er key link
 
             new_key_link_objects_url = Profile.objects.filter(key_link=key)		# Object of Profile Model
             matched_url_counter = 0
@@ -84,7 +89,7 @@ def Model_Link_Counter_Save(key_link_name, URLList):
             if(Link_Counter.objects.filter(key_link = foreignKey, compare_key_link = key_link_list_foreign_key).count() == 0):
                 link_counter_model = Link_Counter(
                     key_link = foreignKey,							# Model Key Link
-                    compare_key_link = key_link_list_foreign_key,						# Post Key Link
+                    compare_key_link = key_link_list_foreign_key,	# Post Key Link
                     no_of_data_matched = matched_url_counter,
                     compare_key_link_no_of_data = data_size,
                 )
@@ -95,7 +100,7 @@ def Model_Link_Counter_Save(key_link_name, URLList):
 
             if(Link_Counter.objects.filter(key_link = key_link_list_foreign_key, compare_key_link = foreignKey).count() == 0):
                 link_counter_model = Link_Counter(
-                    key_link = key_link_list_foreign_key,								# Post Key Link
+                    key_link = key_link_list_foreign_key,			# Post Key Link
                     compare_key_link = foreignKey,					# Model Key Link
                     no_of_data_matched = matched_url_counter,
                     compare_key_link_no_of_data = len(total_url_in_model_key_link),
@@ -105,12 +110,13 @@ def Model_Link_Counter_Save(key_link_name, URLList):
     return HttpResponse("OK")
 
 
+#storing all about of a key_link in Profile_Extended model
 def Model_Profile_Extended_Save(key_link_name, post_dr, post_da, post_traffic, post_spamscore, post_existingcost, post_new_Cost, post_email, post_niche):
     # Foreign Key access
     key_link_list_foreign_key = Key_Link_List.objects.get(key_link=key_link_name)
 
     profile_extended_model = Profile_Extended(
-        key_link = key_link_list_foreign_key,						# Key Link List Foreign Key
+        key_link = key_link_list_foreign_key,	# Key Link List Foreign Key
         domanin_rank = post_dr,
         domanin_auth = post_da,
         traffic = post_traffic,

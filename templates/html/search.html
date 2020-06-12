@@ -71,7 +71,6 @@
 					<h5>Top 10</h5>
 					<ol>
 						<div id="top10data"></div>
-						<!-- <li id="tp0">Facebook.com 2423 100% Show URL</li> -->
 					</ol>
 				</div>
 				<div class="vsl"></div>
@@ -187,6 +186,8 @@
 						$("[id*='showtp']").click(function (e) {
 							e.preventDefault();
 
+							console.log("FUCK YOu")
+
 							var number = $(this).attr('id').split('_').pop(); //Geting the number for upload episode
 							var src = $('#tp' + number).text().split(" ")[0];
 
@@ -210,7 +211,7 @@
 							var test = "<li id=" + "lt" + i + ">" + castData[i].url + " <b><span style=" + '"padding-left: 50px; color:#FF0000;"' + ">"
 								+ castData[i].match + "</span></b>" + " <b><span style=" + '"padding-left: 50px; padding-right:50px; color:#46E956;"' + ">"
 								+ castData[i].percentage + "%" + "</span></b> <button type=" + '"button"' + " class=" + '"btn btn-primary"'
-								+ " data-toggle=" + '"modal"' + " data-target=" + '"#modalCenter"' + "id=" + "showlt_" + i + ">Show URL</button></li>"
+								+ "id=" + "showlt_" + i + ">Show URL</button></li>"
 
 							if (count < 10) {
 								$('#least10data').append(test);
@@ -239,7 +240,7 @@
 							var test = "<li id=" + "cp" + i + ">" + castData[i].url + " <b><span style=" + '"padding-left: 50px; color:#FF0000;"' + ">"
 								+ castData[i].match + "</span></b>" + " <b><span style=" + '"padding-left: 50px; padding-right:50px; color:#46E956;"' + ">"
 								+ castData[i].percentage + "%" + "</span></b> <button type=" + '"button"' + " class=" + '"btn btn-primary"'
-								+ " data-toggle=" + '"modal"' + " data-target=" + '"#modalCenter"' + "id=" + "complete_" + i + ">Show URL</button></li>"
+								+ "id=" + "complete_" + i + ">Show URL</button></li>"
 
 							if (i < 10) {
 								$('#completeListfirst').append(test);

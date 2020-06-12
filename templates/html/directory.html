@@ -67,18 +67,18 @@
 				<div class="form-group col-sm-4">
 					<input type="submit" id="createdir" class="btn btn-primary" value="Create Directory">
 				</div>
-			</div>	
+			</div>
 		</div>
 	</form>
 	<hr>
 	<form method="POST" id="form-2">
-		<div class = "container form-group">
+		<div class="container form-group">
 			<div class="form-group row pt-5">
 				<div class="col-sm-8">
 					<input type="text" name="" placeholder="Search Directory" class="form-control" id="searchdir">
 				</div>
 				<div class="col-sm-2">
-					<input type="submit" name="" value="Search" class="btn-primary form-control">
+					<input id="search" type="submit" name="" value="Search" class="btn-primary form-control">
 				</div>
 			</div>
 			<div class="row pt-3 pb-2  pl-3">
@@ -86,47 +86,28 @@
 			</div>
 			<div class="row">
 				<div class="col-sm-6 pt-3">
-					<h4 id="setdir">Directory Name: Mysite</h4> <!-- use javascript inner.html  -->
+					<h4 id="setdir">Directory Name:</h4> <!-- use javascript inner.html  -->
 					<h4>Linked: </h4>
 					<ol>
-						<li>
-							<div class="row pl-3" id="linkedid_">
-							<p id="linkedp_" >www.xyz.com<a href="#" id="linkeddel_" value="www.xyz.com">&nbsp &nbsp &nbsp Delete Link</a></p>
-						</div>
-						</li>
-						<li>
-							<div class="row pl-3" id="linkedid_">
-							<p id="linkedp_" >www.xyz.com<a href="#" id="linkeddel_" value="www.xyz.com">&nbsp &nbsp &nbsp Delete Link</a></p>
-						</div>
-						</li>
-					</ol>
+						<div id="delete_list"></div>						
+					</ol>					
+					<hr>
+					<h4>Directory List:</h4>
+					<div class="" id="wholelist_dir"></div>
 				</div>
-				<div class="col-sm-6 pt-5" >
+				<div class="col-sm-6 pt-5" id="add_list">
 					<div class="row">
 						<div class="col-sm-6">
-							<input type="text" name="" class="form-control" placeholder="Search Guest link" >	
+							<input id="search_key_text" type="text" name="" class="form-control"
+								placeholder="Search key link">
 						</div>
-						<div class="col-sm-3" >
-							<input type="submit" class= "form-control btn btn-primary" value="search">
+						<div class="col-sm-3">
+							<input id="search_key" type="submit" class="form-control btn btn-primary" value="search">
 						</div>
 					</div>
-					<hr>
-					<div class="row pl-3" id="guestid_">
-						<p id="guestp_" >www.xyz.com<a href="#" id="guestadd_" value="www.xyz.com">&nbsp &nbsp &nbsp Add Link</a></p>
-					</div>
-					<hr>
-					<div class="row pl-3" id="guestid_">
-						<p id="guestp_" >www.xyz.com<a href="#" id="guestadd_" value="www.xyz.com">&nbsp &nbsp &nbsp Add Link</a></p>
-					</div>
-					<hr>
-					<div class="row pl-3" id="guestid_">
-						<p id="guestp_" >www.xyz.com<a href="#" id="guestadd_" value="www.xyz.com">&nbsp &nbsp &nbsp Add Link</a></p>
-					</div>
-					<hr>
-
-				</div>
+					<div class="" id="wholelist"></div>
+				</div>			
 			</div>
-		</div>
 	</form>
 
 </body>
@@ -135,8 +116,347 @@
 <script>
 
 	$(document).ready(function (e) {
-		
+
+		// Initial Loading all Key Link in HTML
+
+		var searchFoundDir = "";
+
+		// Add link from guestpostlinkdir
+
+		function addLinkToDirectoy( guestlink ){
+			$.ajax({
+				type: 'POST',
+				url : '/directory',
+				data: {
+					'btnpressed': "addlinktodir",
+					'url' : guestlink,
+					'dirname' : searchFoundDir
+				},
+				success: function(data){
+					alert("Link added to directory");
+					$("#refresh").click()
+				},
+				error: function(data){
+					alert("Link Adding failed")
+				}
+
+			});
+		}
+
+
+		// Initial Loads of all key_link
+		$.ajax({
+			type: 'POST',
+			url: '/directory',
+			data: {
+				'btnpressed': "initial"
+			},
+			success: function (data) {
+				var dataset = JSON.parse(data['dataset']);
+				// console.log("ADD Data", dataset);
+
+				for (var i = 0; i < dataset.length; i++) {
+					var addLink = '<div class="row pt-2 pl-2" id="rowid_'+i+'">'
+						+	'<div class="col-sm-6">'
+						+ '<a id="addlink_'+ i +'" href="#"> '+ dataset[i].pk + '</a>'
+						+  '</div>' 
+						+ 	'<div class="col-sm-6">'
+						+		'<input type="submit" name="" id="guestadd_'+ i +'" value="Add Link" class="btn btn-light p-">'
+						+ 	'</div>'
+						+ '</div>'
+					$('#wholelist').append(addLink);
+				}
+
+				// Send hits to background to a link 
+				$("[id*='guestadd_']").click(function (e) {
+						e.preventDefault();						
+						var number = $(this).attr('id').split('_').pop();
+						var src = $('#addlink_' + number).text();
+
+						if (src == "") {
+							alert("Couldn't grab the link");
+							return false;
+						}
+						
+						if($("#searchdir").val() ) {
+							addLinkToDirectoy(src);
+						}
+						else{
+							alert("First select a Directory");
+						}
+
+					});
+			},
+			error: function () {
+				alert("No Key Link Found!!");
+			}
+		})
+
+
+
+		//Delete a directory
+		function delDirectoy( dir ){			
+				$.ajax({
+					type: 'POST',
+					url : '/directory',
+					data: {
+						'btnpressed': "del_dir",						
+						'dirname' : dir
+					},
+					success: function(data){
+						alert("Directory Deleted, Please Refresh the page.");
+						// $("#refresh").click();
+
+					},
+					error: function(data){
+						alert("Directory Deleting Failed")
+					}
+				});
+			}
+
+
+		// Initial Loads of all Directory		
+		$.ajax({
+			type: 'POST',
+			url: '/directory',
+			data: {
+				'btnpressed': "initial_dir"
+			},
+			success: function (data) {
+				var dataset = JSON.parse(data['dataset']);
+				console.log("Dir Data", dataset);
+
+				for (var i = 0; i < dataset.length; i++) {					
+					var dltDir = '<div class="row pt-2 pl-2" id="rwid_'+i+'">'
+						+	'<div class="col-sm-6">'
+						+ '<a id="dltDir_'+ i +'" href="#"> '+ dataset[i].pk + '</a>'
+						+  '</div>' 
+						+ 	'<div class="col-sm-6">'
+						+		'<input type="submit" name="" id="dlt_'+ i +'" value="Delete Directory" class="btn btn-danger p-">'
+						+ 	'</div>'
+						+ '</div>'
+					$('#wholelist_dir').append(dltDir);
+				}								
+
+				$("[id*='dlt_']").click(function (e) {
+						e.preventDefault();
+
+						
+						var number = $(this).attr('id').split('_').pop();
+						var src = $('#dltDir_' + number).text();
+						console.log(src);
+
+						if (src == "") {
+							alert("Couldn't grab the link");
+							return false;
+						}
+						
+						delDirectoy(src);
+					});
+
+			},
+			error: function () {
+				alert("No Directoy Found!");
+			}
+		})		
+
+
+
+
+
+		// Create Directory
+		$("#createdir").click(function (e) {
+			e.preventDefault();
+
+			if ($('#dirname').val() === "") {
+				alert("Directory Name can't be Empty")
+			}
+			else {
+				$.ajax({
+					type: 'POST',
+					url: '/directory',
+					data: {
+						'dirname': $('#dirname').val(),
+						'btnpressed': "createdir"
+					},
+					success: function (e) {
+						alert("Directory Created Successfully");
+						$('#form')[0].reset();
+					},
+					error: function () {
+						alert("Sorry, Duplicate Directory exists");
+					}
+				});
+			}
+		});
+
+
+
+		// delete key_link from directory
+		function delLinkToDirectoy( guestlink ){
+				$.ajax({
+					type: 'POST',
+					url : '/directory',
+					data: {
+						'btnpressed': "delLinktodir",
+						'url' : guestlink,
+						'dirname' : searchFoundDir
+					},
+					success: function(data){
+						alert("Link Deleted from directory");
+						$("#refresh").click();
+
+					},
+					error: function(data){
+						alert("Link Deleting Failed")
+					}
+				});
+			}
+
+
+		//search a directory with key_link & delete key_link from directory
+		function genDirLink(){
+			$.ajax({
+				type: 'POST',
+				url: '/directory',
+				data: {
+					'searchdir': $('#searchdir').val(),
+					'btnpressed': "search"
+				},
+				success: function (data) {
+					var dataset = JSON.parse(data['dataset']);
+					//console.log(dataset);
+					searchFoundDir = $('#searchdir').val();
+
+					$('#setdir').text("Directory Name: " + $('#searchdir').val())
+					$("[id*='rowiddir_']").remove();
+
+					for (var i = 0; i < dataset.length; i++) {
+						// var str = "<li><div class=" + '"row pl-3"' + " id=" + '"linkedid_ '+i+'" '+"><p id=" + '"linkedp_"' + ">" + dataset[i].fields.key_link + "</p><a style="
+						// 	+ '"padding-left: 50px;"' + " href=" + '"#"' + " id=" + '"linkeddel_"' + ">Delete Link</a>";
+						var addLink = '<div class="row pt-2 pl-2" id="rowiddir_'+i+'">'
+						+	'<div class="col-sm-6">'
+						+  (i+1) + '. <a id="linkedid_'+ i +'" href="#"> '+ dataset[i].fields.key_link + '</a>'
+						+  '</div>' 
+						+ 	'<div class="col-sm-6">'
+						+		'<input type="submit" name="" id="linkeddel_'+ i +'" value="Delete" class="btn btn-danger p-">'
+						+ 	'</div>'
+						+ '</div>'
+
+
+						$('#delete_list').append(addLink);
+					}
+
+					$("[id*='linkeddel_']").click(function (e) {
+						e.preventDefault();
+
+						
+						var number = $(this).attr('id').split('_').pop(); //Geting the number for upload episode
+						var src = $('#linkedid_' + number).text();
+						console.log(src);
+
+						if (src == "") {
+							alert("Couldn't grab the link");
+							return false;
+						}
+						
+						delLinkToDirectoy(src);
+					});
+				},
+				error: function () {
+					alert("Directory Not Found!");
+				}
+			})
+		}
+
+		$("#search").click(function (e) {
+			e.preventDefault();
+			genDirLink();
 			
+		})
+
+
+		// Refresh Current Directory
+		$("#refresh").click(function (e) {
+			e.preventDefault();
+			genDirLink();
+			
+		})
+		
+		// Search a key_link via typing
+		function sendHit( query ){
+			$('#wholelist').toggle();
+			console.log( query )
+			$.ajax({
+				type: 'POST',
+				url: '/directory',
+				data: {
+					'search' : query+"",
+					'btnpressed' : "search_key"
+				},
+				success: function(data){
+					$("[id*='rowid_']").remove();
+					var dataset = JSON.parse(data['dataset']);
+					// console.log("Found", dataset);
+					for (var i = 0; i < dataset.length; i++) {
+						var addLink = '<div class="row pt-2 pl-2" id="rowid_'+i+'">'
+						+	'<div class="col-sm-6">'
+						+ '<a id="addlink_'+ i +'" href="#"> '+ dataset[i].pk + '</a>'
+						+  '</div>' 
+						+ 	'<div class="col-sm-6">'
+						+		'<input type="submit" id="guestadd_'+ i +'" value="Add Link" class="btn btn-light p-">'
+						+ 	'</div>'
+						+ '</div>'
+					$('#wholelist').append(addLink);
+
+					}
+
+					$("[id*='guestadd_']").click(function (e) {
+						e.preventDefault();
+
+						// console.log("ABCD");
+						var number = $(this).attr('id').split('_').pop(); //Geting the number for upload episode
+						var src = $('#addlink_' + number).text();
+						// alert(src)
+
+						if (src == "") {
+							alert("Couldn't grab the link");
+							return false;
+						}
+
+						if($("#searchdir").val() ) {
+							addLinkToDirectoy(src);
+						}
+						else{
+							alert("First select a Directory");
+						}
+
+						
+
+
+					});
+				},
+				error: function () {
+					alert("No Key Link Found!");
+				}
+				
+
+			})
+		}
+
+
+		$('#search_key_text').on("input", function(){
+			var query = $("#search_key_text").val();
+
+			if( query ){
+				sendHit(query);	
+			}
+
+		});
+
+		
+
+
 	});
 
 </script>
