@@ -49,6 +49,10 @@
 		integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
 		crossorigin="anonymous"></script>
 
+	<link type="text/css" href="pagination/simplePagination.css" />
+
+	<script src="https://pagination.js.org/dist/2.1.5/pagination.min.js"></script>
+
 </head>
 
 <body>
@@ -84,7 +88,7 @@
 		</div>
 		<div class="container">
 			<hr>
-			<div clas="row">
+			<div class="row">
 				<div class="col-sm-12" id="order">
 					<h5 style="text-align: left;padding-top: 20px;">Complete list</h5>
 					<input type="button" id="ASCE" class="btn btn-light" value="ASCE">
@@ -94,23 +98,20 @@
 			<div class="row">
 				<div class="col-sm-6" id="completelist">
 					<ol>
-						<div id="completeListfirst"></div>
+						<div id="completeListdata"></div>
 					</ol>
-				</div>
-				<div class="col-sm-6" id="completelist">
-					<ol>
-						<div id="completeListSecond"></div>
-					</ol>
+
+					<div id="pagination-container"></div>
 				</div>
 			</div>
 		</div>
 
-		<div class="container">
+		<!-- <div class="container">
 			<div class="row">
 				<div class="pagination">
 					<a href="#">&laquo;</a>
-					<a href="#">1</a>
-					<a class="active" href="#">2</a>
+					<a class="active" href="#">1</a>
+					<a href="#">2</a>
 					<a href="#">3</a>
 					<a href="#">4</a>
 					<a href="#">5</a>
@@ -118,7 +119,7 @@
 					<a href="#">&raquo;</a>
 				</div>
 			</div>
-		</div>
+		</div> -->
 
 	</form>
 
@@ -128,6 +129,8 @@
 <script>
 
 	$(document).ready(function (e) {
+
+		// initPagination();
 
 		function setCookie(cname, cvalue, exdays) {
 			var d = new Date();
@@ -152,8 +155,8 @@
 
 					document.getElementById("top10data").innerHTML = "";
 					document.getElementById("least10data").innerHTML = "";
-					document.getElementById("completeListfirst").innerHTML = "";
-					document.getElementById("completeListSecond").innerHTML = "";
+					document.getElementById("completeListdata").innerHTML = "";
+					// document.getElementById("completeListSecond").innerHTML = "";
 
 					if (len > 0) {
 						var castData = [];
@@ -183,7 +186,7 @@
 						}
 
 						// Send request to server for another compare of data
-						$("[id*='showtp']").click(function (e) {
+						$("[id*='showtp_']").click(function (e) {
 							e.preventDefault();
 
 							console.log("FUCK YOu")
@@ -220,7 +223,7 @@
 						}
 
 						// Request from least 10 data
-						$("[id*='showlt']").click(function (e) {
+						$("[id*='showlt_']").click(function (e) {
 							e.preventDefault();
 							var number = $(this).attr('id').split('_').pop(); //Geting the number for upload episode
 							var src = $('#lt' + number).text().split(" ")[0];
@@ -236,24 +239,32 @@
 							window.open(url, "_blank");
 						});
 
+						var htmlData = [];
+
 						for (var i = 0; i < castData.length; i++) {
 							var test = "<li id=" + "cp" + i + ">" + castData[i].url + " <b><span style=" + '"padding-left: 50px; color:#FF0000;"' + ">"
 								+ castData[i].match + "</span></b>" + " <b><span style=" + '"padding-left: 50px; padding-right:50px; color:#46E956;"' + ">"
 								+ castData[i].percentage + "%" + "</span></b> <button type=" + '"button"' + " class=" + '"btn btn-primary"'
 								+ "id=" + "complete_" + i + ">Show URL</button></li>"
 
-							if (i < 10) {
-								$('#completeListfirst').append(test);
-							}
-							else {
-								$('#completeListSecond').append(test);
-							}
+							// $('#completeListdata').append(test);
+							htmlData.push(test);
 						}
 
-						$("[id*='complete']").click(function (e) {
+						$('#pagination-container').pagination({
+							dataSource: htmlData,
+							pageSize: 10,
+							callback: function (data, pagination) {
+								$('#completeListdata').html(data);
+							}
+						})
+
+						$("[id*='complete_']").click(function (e) {
 							e.preventDefault();
 							var number = $(this).attr('id').split('_').pop(); //Geting the number for upload episode
 							var src = $('#cp' + number).text().split(" ")[0];
+
+							console.log(src);
 
 							if (src == "") {
 								alert("Data couldn't be extracted from button clicking, Possible ID Not Found Error");
@@ -275,6 +286,8 @@
 				}
 			});
 		});
+
+
 	});
 
 </script>
