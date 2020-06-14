@@ -216,9 +216,7 @@ def Directory(request):
 		elif btnpressed == "initial":
 			key_link_list = Key_Link_List.objects.all()
 			serialized = serializers.serialize('json', key_link_list)
-			
 			data = {"dataset": serialized}
-
 			return JsonResponse(data, safe=False)
 
 		#search key_link from Key_Link_List model by autocomplete search in Turtseo Directories page

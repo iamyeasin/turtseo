@@ -102,13 +102,6 @@
 		</div>
 		<div class="container">
 			<hr>
-			<!-- <div clas="row">
-				<div class="col-sm-12" id="order">
-					<h5 style="text-align: left;padding-top: 20px;">Complete list</h5>
-					<input type="button" id="ASCE" class="btn btn-light" value="ASCE">
-					<input type="button" id="DESC" class="btn btn-light" value="DESC">
-				</div>
-			</div> -->
 			<div class="row">
 				<div class="col-sm-12 pb-5" id="completelist">
 					<table id="completeListfirst" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
@@ -154,13 +147,8 @@
 				},
 				success: function (data) {
 					var dataset = JSON.parse(data['dataset']);
-					console.log(dataset);
+					// console.log(dataset);
 					var len = dataset.length;
-
-					// document.getElementById("top10data").innerHTML = "";
-					// document.getElementById("least10data").innerHTML = "";
-					// document.getElementById("completeListfirst").innerHTML = "";
-					// document.getElementById("completeListSecond").innerHTML = "";
 
 					if (len > 0) {
 						var castData = [];
@@ -174,12 +162,14 @@
 							return ((a.percentage > b.percentage) ? -1 : ((a.percentage == b.percentage) ? 0 : 1));
 						});
 
+
+
 						//  Top 10 Datas
 						var count = 0;
 
 						for (var i = 0; i < castData.length; i++) {
 							
-							var test = '<tr>'
+							var top10 = '<tr>'
 								     +'<td><a href="#" id="tp'+i+'">'+castData[i].url +'</a></td>'
 								      + '<td>'+ castData[i].match +'</td>'
 								      + '<td>'+ castData[i].percentage +"%" +'</td>'
@@ -188,7 +178,8 @@
 
 
 							if (count < 10) {
-								$('#top10table tr:last').after(test);
+								// $('#top10table tr:last').after(test);
+								$('#top10table').find('tbody').append(top10);
 
 							}
 							count = count + 1;
@@ -218,7 +209,7 @@
 						count = 0;
 
 						for (var i = castData.length - 1; i >= 0; i--) {
-							var test = '<tr>'
+							var least10 = '<tr>'
 								     +'<td><a href="#" id="lt'+i+'">'+castData[i].url +'</a></td>'
 								      + '<td>'+ castData[i].match +'</td>'
 								      + '<td>'+ castData[i].percentage +"%" +'</td>'
@@ -227,7 +218,8 @@
 
 
 							if ( count < 10 ) {
-								$('#least10table').append(test);
+								// $('#least10table').append(test);
+								$('#least10table').find('tbody').append(least10);
 							}
 							count = count + 1;
 						}
@@ -257,7 +249,8 @@
 								      + '<td ><button type="button" class="btn btn-link" id="complete_'+i+'">View Link</button></td>'
 								    + '</tr>'
 
-								$('#completeListfirst').append(cmplt);
+								// $('#completeListfirst').append(cmplt);
+								$('#completeListfirst').find('tbody').append(cmplt);
 						}
 						$('#completeListfirst').DataTable();
 

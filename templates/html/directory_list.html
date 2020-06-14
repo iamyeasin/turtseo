@@ -1,0 +1,64 @@
+<h1>
+	directory List
+</h1>
+
+
+
+<script type="text/javascript">
+		// Initial Loads of all Directory		
+		$(document).ready( function(e){
+
+			function loadAllDir(){
+				$.ajax({
+				type: 'POST',
+				url: '/directory',
+				data: {
+					'btnpressed': "initial_dir"
+				},
+				success: function (data) {
+					var dataset = JSON.parse(data['dataset']);
+					console.log("Dir Data", dataset);
+
+					for (var i = 0; i < dataset.length; i++) {					
+						var dltDir = '<div class="row pt-2 pl-2" id="rwid_'+i+'">'
+							+	'<div class="col-sm-6">'
+							+ '<a id="dltDir_'+ i +'" href="#"> '+ dataset[i].pk + '</a>'
+							+  '</div>' 
+							+ 	'<div class="col-sm-6">'
+							+		'<input type="submit" name="" id="dlt_'+ i +'" value="Delete Directory" class="btn btn-danger p-">'
+							+ 	'</div>'
+							+ '</div>'
+						$('#wholelist_dir').append(dltDir);
+					}								
+
+					$("[id*='dlt_']").click(function (e) {
+							e.preventDefault();
+
+							
+							var number = $(this).attr('id').split('_').pop();
+							var src = $('#dltDir_' + number).text();
+							console.log(src);
+
+							if (src == "") {
+								alert("Couldn't grab the link");
+								return false;
+							}
+							
+							delDirectoy(src);
+						});
+
+				},
+				error: function () {
+					alert("No Directoy Found!");
+				}
+			})	
+		}
+
+
+		loadAllDir()	
+	
+		})
+	
+
+
+</script>
