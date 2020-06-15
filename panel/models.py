@@ -26,8 +26,8 @@ class Profile_Extended(models.Model):
     domanin_auth = models.CharField(max_length=500, default="")
     traffic = models.FloatField(blank=False)
     spam_score = models.IntegerField(blank=False)
-    existing_cost = models.IntegerField(blank=False)
-    new_cost = models.IntegerField(blank=False)
+    existing_cost = models.CharField(max_length=50, blank=False)
+    new_cost = models.CharField(max_length=50, blank=False)
     email = models.EmailField()
     niche = models.CharField(max_length=500)
 
