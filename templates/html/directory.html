@@ -1,37 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-
-<nav class="navbar navbar-expand-lg bg-dark bg-primary sticky-top">
-	<!-- <nav class="navbar navbar-dark bg-dark">  -->
-	<div class="container">
-		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-			<ul class="navbar-nav">
-				<li {% if '/' == request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
-					{% endif %}>
-					<a class="nav-link" href="{% url 'index' %}">Home</a>
-				</li>
-
-				<li {% if 'search' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
-					{% endif %}>
-					<a class="nav-link" href="{% url 'search' %}">Search</a>
-				</li>
-
-				<li {% if 'directory' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
-					{% endif %}>
-					<a class="nav-link" href="{% url 'directory' %}">Directory</a>
-				</li>
-
-				<li {% if 'admin' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
-					{% endif %}>
-					<a class="nav-link" href="{% url 'admin:index' %}">Admin Login</a>
-				</li>
-
-			</ul>
-		</div>
-	</div>
-</nav>
-
 <head>
 	<title>Segmentizations</title>
 	<!-- CSS only -->
@@ -53,6 +22,36 @@
 </head>
 
 <body>
+	<nav class="navbar navbar-expand-lg bg-dark bg-primary sticky-top">
+		<!-- <nav class="navbar navbar-dark bg-dark">  -->
+		<div class="container">
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+				<ul class="navbar-nav">
+					<li {% if '/' == request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
+						{% endif %}>
+						<a class="nav-link" href="{% url 'index' %}">Home</a>
+					</li>
+
+					<li {% if 'search' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
+						{% endif %}>
+						<a class="nav-link" href="{% url 'search' %}">Search</a>
+					</li>
+
+					<li {% if 'directory' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
+						{% endif %}>
+						<a class="nav-link" href="{% url 'directory' %}">Directory</a>
+					</li>
+
+					<li {% if 'admin' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
+						{% endif %}>
+						<a class="nav-link" href="{% url 'admin:index' %}">Admin Login</a>
+					</li>
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+
 	<div class="container">
 		<h1>Turtseo Directories</h1>
 	</div>
