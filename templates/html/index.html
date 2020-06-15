@@ -71,7 +71,7 @@
 			</div>
 			<hr>
 
-			<div><textarea class="form-control col-sm-8" id="tagarea" readonly rows="2"></textarea><br></div>
+			<!-- <div><textarea class="form-control col-sm-8" id="tagarea" readonly rows="2"></textarea><br></div> -->
 			<div class="form-group row pt-5">
 				<label for="" class="col-sm-2 col-form-label">Niche </label>
 				<div class="col-sm-10">
@@ -103,11 +103,11 @@
 			<div class="form-group row">
 				<label for="" class="col-sm-2 col-form-label">Existing Cost </label>
 				<div class="col-sm-4">
-					<input type="number" class="form-control" id="existingcost" value="" required placeholder="0">
+					<input type="text" class="form-control" id="existingcost" value="" required placeholder="0">
 				</div>
 				<label for="" class="col-sm-2 col-form-label">New Cost </label>
 				<div class="col-sm-4">
-					<input type="number" class="form-control" id="new_cost" value="" required placeholder="0">
+					<input type="text" class="form-control" id="new_cost" value="" required placeholder="0">
 				</div>
 			</div>
 			<div class="form-group row">
@@ -178,12 +178,12 @@
 			else if ($.isNumeric($('#spamscore').val()) == false) {
 				alert("Spam Score must be integer")
 			}
-			else if ($.isNumeric($('#existingcost').val()) == false) {
-				alert("Existing Cost must be integer")
-			}
-			else if ($.isNumeric($('#new_cost').val()) == false) {
-				alert("New Cost must be integer")
-			}
+			// else if ($.isNumeric($('#existingcost').val()) == false) {
+			// 	alert("Existing Cost must be integer")
+			// }
+			// else if ($.isNumeric($('#new_cost').val()) == false) {
+			// 	alert("New Cost must be integer")
+			// }
 			else if ($.isNumeric($('#traffic').val()) == false) {
 				alert("Traffic must be Float")
 			}
