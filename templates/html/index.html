@@ -25,42 +25,40 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg bg-dark bg-primary sticky-top">
-	<!-- <nav class="navbar navbar-dark bg-dark">  -->
-	<div class="container">
-		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-			<ul class="navbar-nav">
-				<li {% if '/' == request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
-					{% endif %}>
-					<a class="nav-link" href="{% url 'index' %}">Home</a>
-				</li>
+	<nav class="navbar navbar-expand-lg bg-dark bg-primary sticky-top">		
+		<div class="container">
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+				<ul class="navbar-nav">
+					<li {% if '/' == request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
+						{% endif %}>
+						<a class="nav-link" href="{% url 'index' %}">Home</a>
+					</li>
 
-				<li {% if 'search' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
-					{% endif %}>
-					<a class="nav-link" href="{% url 'search' %}">Search</a>
-				</li>
+					<li {% if 'search' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
+						{% endif %}>
+						<a class="nav-link" href="{% url 'search' %}">Search</a>
+					</li>
 
-				<li {% if 'directory' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
-					{% endif %}>
-					<a class="nav-link" href="{% url 'directory' %}">Directory</a>
-				</li>
+					<li {% if 'directory' in request.path %} class="nav-item active mr-3" {% else %}
+						class="nav-item mr-3" {% endif %}>
+						<a class="nav-link" href="{% url 'directory' %}">Directory</a>
+					</li>
 
-				<li {% if 'admin' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
-					{% endif %}>
-					<a class="nav-link" href="{% url 'admin:index' %}">Admin Login</a>
-				</li>
+					<li {% if 'admin' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
+						{% endif %}>
+						<a class="nav-link" href="{% url 'admin:index' %}">Admin Login</a>
+					</li>
 
-			</ul>
+				</ul>
+			</div>
 		</div>
-	</div>
-</nav>
+	</nav>
 
 
 	<div class="container">
 		<h1>Turtseo Data Panel</h1>
 	</div>
-	<form method="POST" id="form">
-		<!-- {% csrf_token %} -->
+	<form method="POST" id="form">		
 		<div class="container form-group">
 			<div class="form-group row pt-5">
 				<label for="" class="col-sm-2 col-form-label">Enter Key Link </label>
@@ -133,6 +131,7 @@
 	$(document).ready(function (e) {
 		var parseData = [];
 
+		//upload a file
 		$("#file").change(function (e) {
 			e.preventDefault();
 			let selectedFile = document.getElementById('file').files[0];
@@ -160,6 +159,7 @@
 			return regex.test(email);
 		};
 
+		// save input data
 		$("#save").click(function (e) {
 			e.preventDefault();
 
@@ -206,6 +206,7 @@
 					}
 				}
 
+				// send hit for save input data
 				$.ajax({
 					type: 'POST',
 					url: '',
@@ -235,6 +236,7 @@
 	});
 
 </script>
+
 {% endblock %}
 
 </html>

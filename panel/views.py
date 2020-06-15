@@ -103,6 +103,7 @@ def Directory(request):
 	if request.method == "POST":
 		btnpressed = request.POST.get('btnpressed')
 
+
 		#delete key_link from DirectoryItem model
 		if(btnpressed == "delLinktodir"):
 			try:
@@ -158,14 +159,6 @@ def Directory(request):
 				return HttpResponse(e)
 
 
-		#show all directories initially in Turtseo Directories page
-		elif btnpressed == "initial_dir":
-			directory = DirectoryName.objects.all()
-			serialized = serializers.serialize('json', directory)
-			
-			data = {"dataset": serialized}
-			return JsonResponse(data, safe=False)
-
 		#create a new directory in DirectoryName model
 		elif(btnpressed == 'createdir'):
 			dirname = request.POST.get('dirname').strip()
@@ -181,6 +174,7 @@ def Directory(request):
 				directory_name_model.save()		
 
 				return render(request, 'html/directory.html')
+
 
 		#search directory with all key_link from DirectoryName & DirectoryItem model
 		elif btnpressed == 'search':
@@ -199,25 +193,13 @@ def Directory(request):
 				return HttpResponseNotFound("No Directory Found")
 
 
-		#delete a directory from DirectoryName model
-		elif(btnpressed == "del_dir"):
-			try:
-				dirname = request.POST.get('dirname').strip()				
-				dirname = dirname.lower()
-
-				DirectoryName.objects.filter(directory_name=dirname).delete()
-
-				return HttpResponse("Delete Completed")
-
-			except:
-				return HttpResponse("Delete Operation couldn't Complete")
-
 		#show all key_link initially in Turtseo Directories page from Key_Link_List model
 		elif btnpressed == "initial":
 			key_link_list = Key_Link_List.objects.all()
 			serialized = serializers.serialize('json', key_link_list)
 			data = {"dataset": serialized}
 			return JsonResponse(data, safe=False)
+
 
 		#search key_link from Key_Link_List model by autocomplete search in Turtseo Directories page
 		else:
@@ -258,3 +240,46 @@ def Directory(request):
 				
 	else:
 		return render(request, 'html/directory.html')
+
+
+#All about  "All Directory" button in "Turtseo Directories/Directory" page:
+@csrf_exempt
+def Directory_List(request):
+
+	if request.method == "POST":
+		btnpressed = request.POST.get('btnpressed')
+		
+
+		#Show all directory initially in "Directory List" page
+		if btnpressed == "load_all_directory":
+
+			try:
+				directory_name_model = DirectoryName.objects.all();
+
+			except:
+				directory_name_model = None
+			
+			if directory_name_model != None:
+				serialized = serializers.serialize('json', directory_name_model)
+				data = {"dataset": serialized}
+
+				return JsonResponse(data, safe=False)
+
+			else:
+				return HttpResponseNotFound("No data found")
+
+
+		#Delete a directory from "Directory" or "Directory List" page
+		elif(btnpressed == "delete_directory"):
+			try:
+				dirname = request.POST.get('dirname').strip()
+				dirname = dirname.lower()
+
+				DirectoryName.objects.filter(directory_name=dirname).delete()
+
+				return HttpResponse("Delete Completed")
+
+			except:
+				return HttpResponse("Delete Operation couldn't Complete")
+
+	return render(request, 'html/directory_list.html')

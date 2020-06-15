@@ -1,12 +1,14 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>Directories</title>
 	<!-- CSS only -->
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"
 		integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-		<script type="text/javascript" charset="utf8" src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
 		integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
@@ -14,18 +16,19 @@
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
 		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
 		crossorigin="anonymous"></script>
-		<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
 		integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
 		crossorigin="anonymous"></script>
-		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
-	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+	<link rel="stylesheet" type="text/css"
+		href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 
 </head>
 
 <body>
-	<nav class="navbar navbar-expand-lg bg-dark bg-primary sticky-top">
-		<!-- <nav class="navbar navbar-dark bg-dark">  -->
+	<nav class="navbar navbar-expand-lg bg-dark bg-primary sticky-top">		
 		<div class="container">
 			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 				<ul class="navbar-nav">
@@ -39,8 +42,8 @@
 						<a class="nav-link" href="{% url 'search' %}">Search</a>
 					</li>
 
-					<li {% if 'directory' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
-						{% endif %}>
+					<li {% if 'directory' in request.path %} class="nav-item active mr-3" {% else %}
+						class="nav-item mr-3" {% endif %}>
 						<a class="nav-link" href="{% url 'directory' %}">Directory</a>
 					</li>
 
@@ -57,8 +60,7 @@
 	<div class="container">
 		<h1>Turtseo Directories</h1>
 	</div>
-	<form method="POST" id="form">
-		<!-- {% csrf_token %} -->
+	<form method="POST" id="form">		
 		<div class="container form-group">
 			<div class="form-group row pt-5">
 				<label for="" class="col-sm-2 col-form-label">Create New Directory </label>
@@ -91,37 +93,39 @@
 			<div class="row">
 				<div class="col-sm-6 pt-3">
 					<h4 id="setdir">Directory Name:</h4> <!-- use javascript inner.html  -->
-					<h4>Linked: </h4>						
-							<table id="GuestLinkDel" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-							<thead>
-						    <tr>
-						      <th class="th-sm">Select</th>
-						      <th class="th-sm">Link</th>
-						    </tr>
-						  </thead>
-						  <tbody></tbody>
-						</table>
-						<input type="button" class="btn btn-danger" name="" id="delLinkFromDir" value="Delete">
-											
+					<h4>Linked: </h4>
+					<table id="GuestLinkDel" class="table table-striped table-bordered table-sm" cellspacing="0"
+						width="100%">
+						<thead>
+							<tr>
+								<th class="th-sm">Select</th>
+								<th class="th-sm">Link</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+					<input type="button" class="btn btn-danger" name="" id="delLinkFromDir" value="Delete">
+
 					<hr>
-					
+
 				</div>
 				<div class="col-sm-6 pt-5 pb-5" id="add_list">
 					<div class="row">
 					</div>
-					<table id="GuestLink" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-							<thead>
-						    <tr>
-						      <th class="th-sm">Select </th>
-						      <th class="th-sm">Link</th>
-						    </tr>
-						  </thead>
-						  <tbody></tbody>
-						</table>
-						<input type="button" class="btn btn-secondary" name="" id="addLinkToDir" value="Add">
+					<table id="GuestLink" class="table table-striped table-bordered table-sm" cellspacing="0"
+						width="100%">
+						<thead>
+							<tr>
+								<th class="th-sm">Select</th>
+								<th class="th-sm">Link</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+					<input type="button" class="btn btn-secondary" name="" id="addLinkToDir" value="Add">
 					<div class="" id="wholelist">
 					</div>
-				</div>			
+				</div>
 			</div>
 	</form>
 
@@ -132,40 +136,35 @@
 
 	$(document).ready(function (e) {
 
-		// Initial Loading all Key Link in HTML
+		// Initial Loading all key_link in HTML
 		$("#search_key").hide();
 		$("#refresh").hide();
 		var searchFoundDir = "";
 		var failed = 0; var success = 0;
 
 
-		// Add link from guestpostlinkdir
-		function addLinkToDirectoy( guestlink ){
+		//send hit to add key_link in a selected directory
+		function addLinkToDirectoy(guestlink) {
 			$.ajax({
 				type: 'POST',
-				url : '/directory',
+				url: '/directory',
 				data: {
 					'btnpressed': "addlinktodir",
-					'url' : guestlink,
-					'dirname' : searchFoundDir
+					'url': guestlink,
+					'dirname': searchFoundDir
 				},
-				success: function(data){
-					// alert("Link added to directory");
+				success: function (data) {					
 					$("#refresh").click()
-					success += 1; 
-					// console.log(success + "succs");
+					success += 1;					
 				},
-				error: function(data){
-					// alert("Link Adding failed")
-					failed = failed + 1;
-					// console.log(failed + "failed");
+				error: function (data) {					
+					failed = failed + 1;					
 				}
-
 			});
 		}
 
 
-		// Initial Loads of all key_link
+		//Initially Loads of all key_link in "Directory" page
 		$.ajax({
 			type: 'POST',
 			url: '/directory',
@@ -173,50 +172,45 @@
 				'btnpressed': "initial"
 			},
 			success: function (data) {
-				var dataset = JSON.parse(data['dataset']);
-				// console.log("ADD Data", dataset);
+				var dataset = JSON.parse(data['dataset']);				
 				$('#GuestLink').find('tbody').empty();
 
 				for (var i = 0; i < dataset.length; i++) {
-					 var addLink = '<tr>'
-                                + '<td><div class="custom-control custom-checkbox">'
-                          		+ '<input type="checkbox" class="custom-control-input" id="guestadd_'+i+'" type="checkbox">'
-                                + '<label class="custom-control-label" for="guestadd_'+i+'"></label>'
-                              	+ '</div></td>'
-                            	+ '<td><a href="#" id="addlink_'+i+'">'+ dataset[i].pk +'</a></td>'
-                            	+ '</tr>'
+					var addLink = '<tr>'
+						+ '<td><div class="custom-control custom-checkbox">'
+						+ '<input type="checkbox" class="custom-control-input" id="guestadd_' + i + '" type="checkbox">'
+						+ '<label class="custom-control-label" for="guestadd_' + i + '"></label>'
+						+ '</div></td>'
+						+ '<td><a href="#" id="addlink_' + i + '">' + dataset[i].pk + '</a></td>'
+						+ '</tr>'
 
-
-					$('#GuestLink').find('tbody').append(addLink);
-
-					// loadAllDir();
+					$('#GuestLink').find('tbody').append(addLink);					
 				}
+
 				$('#GuestLink').DataTable();
 
 
-				// Send hits to background to a link 
-				// #addLinkToDir
+				//add a key_link in a selected directory
 				$("#addLinkToDir").click(function (e) {
-					 e.preventDefault();				
-					 success =0,failed=0;		
-					 var total_checked = $('#GuestLink').find('input[type="checkbox"]:checked').length;
-					 if( total_checked && searchFoundDir != "" ){
-						 	for( var i=0; i<total_checked; i++ ){
-						 	var number = $('#GuestLink').find('input[type="checkbox"]:checked')[i].id.split('_').pop();
-						 	// $('#GuestLink').find('input[type="checkbox"]:checked')
-						 	console.log(number)
-						 	var src = $('#addlink_' + number).text();
-						 	// console.log(src)
-						 		if($("#searchdir").val() ) {	
-									addLinkToDirectoy(src);
-								}
-						 	}
-					 }
-					 else{
+					e.preventDefault();
+					success = 0, failed = 0;
+
+					var total_checked = $('#GuestLink').find('input[type="checkbox"]:checked').length;
+
+					if (total_checked && searchFoundDir != "") {
+						for (var i = 0; i < total_checked; i++) {
+							var number = $('#GuestLink').find('input[type="checkbox"]:checked')[i].id.split('_').pop();
+							var src = $('#addlink_' + number).text();
+							
+							if ($("#searchdir").val()) {
+								addLinkToDirectoy(src);
+							}
+						}
+					}
+					else {
 						alert("First select a Directory");
 					}
-
-					});
+				});
 			},
 			error: function () {
 				alert("No Key Link Found!!");
@@ -224,46 +218,46 @@
 		})
 
 
+		//Delete a directory from "Directory" page
+		function delDirectoy(dir) {
+			$.ajax({
+				type: 'POST',
+				url: '/directory',
+				data: {
+					'btnpressed': "del_dir",
+					'dirname': dir
+				},
 
-		//Delete a directory
-		function delDirectoy( dir ){			
-				$.ajax({
-					type: 'POST',
-					url : '/directory',
-					data: {
-						'btnpressed': "del_dir",						
-						'dirname' : dir
-					},
-					success: function(data){
-						alert("Directory Deleted");
-						// $("#refresh").click();
-						$("#wholelist_dir div").empty();
-						// $("#refresh").click()
-						loadAllDir()
+				success: function (data) {
+					alert("Directory Deleted");					
+					$("#wholelist_dir div").empty();
 
-					},
-					error: function(data){
-						alert("Directory Deleting Failed")
-					}
-				});
-			}
+					loadAllDir()
+				},
+
+				error: function (data) {
+					alert("Directory Deleting Failed")
+				}
+			});
+		}
 
 
-		// Load all directories on click of button
+		//create a new window & show all directories on click of button "All Directory"
 		$("[id*='alldirs']").click(function (e) {
-				e.preventDefault();
-				var url = 'http://' + window.location.host + '/directory';
-				window.open(url, "_blank");
+			e.preventDefault();
+			var url = 'http://' + window.location.host + '/directory_list';
+			window.open(url, "_blank");
 		});
 
 
-		// Create Directory
+		//Create a new directory
 		$("#createdir").click(function (e) {
 			e.preventDefault();
 
 			if ($('#dirname').val() === "") {
 				alert("Directory Name can't be Empty")
 			}
+
 			else {
 				$.ajax({
 					type: 'POST',
@@ -275,8 +269,7 @@
 					success: function (e) {
 						alert("Directory Created Successfully");
 						$('#form')[0].reset();
-						$("#wholelist_dir div").empty();
-						// $("#refresh").click()
+						$("#wholelist_dir div").empty();						
 						loadAllDir()
 					},
 					error: function () {
@@ -288,30 +281,30 @@
 
 
 
-		// delete key_link from directory
-		function delLinkToDirectoy( guestlink ){
-				$.ajax({
-					type: 'POST',
-					url : '/directory',
-					data: {
-						'btnpressed': "delLinktodir",
-						'url' : guestlink,
-						'dirname' : searchFoundDir
-					},
-					success: function(data){
-						// alert("Link Deleted from directory");
-						$("#refresh").click();
+		//send hit to delete key_link from a directory
+		function delLinkToDirectoy(guestlink) {
+			$.ajax({
+				type: 'POST',
+				url: '/directory',
+				data: {
+					'btnpressed': "delLinktodir",
+					'url': guestlink,
+					'dirname': searchFoundDir
+				},
 
-					},
-					error: function(data){
-						alert("Link Deleting Failed")
-					}
-				});
-			}
+				success: function (data) {					
+					$("#refresh").click();
+				},
+
+				error: function (data) {
+					alert("Link Deleting Failed")
+				}
+			});
+		}
 
 
 		//search a directory with key_link & delete key_link from directory
-		function genDirLink(){
+		function genDirLink() {
 			$.ajax({
 				type: 'POST',
 				url: '/directory',
@@ -319,60 +312,56 @@
 					'searchdir': $('#searchdir').val(),
 					'btnpressed': "search"
 				},
-				success: function (data) {
-					var dataset = JSON.parse(data['dataset']);
-					//console.log(dataset);
-					searchFoundDir = $('#searchdir').val();
 
+				success: function (data) {
+					var dataset = JSON.parse(data['dataset']);					
+					searchFoundDir = $('#searchdir').val();
 
 					$('#setdir').text("Directory Name: " + $('#searchdir').val())
 					$('#GuestLinkDel').find('tbody').empty();
 
-						for (var i = 0; i < dataset.length; i++) {
-							var delLink = '<tr>'
-	                                + '<td><div class="custom-control custom-checkbox">'
-	                          		+ '<input type="checkbox" class="custom-control-input" id="linkedid_'+i+'" type="checkbox">'
-	                                + '<label class="custom-control-label" for="linkedid_'+i+'"></label>'
-	                              	+ '</div></td>'
-	                            	+ '<td><a href="#" id="linkeddel_'+i+'">'+ dataset[i].fields.key_link +'</a></td>'
-	                            	+ '</tr>'
+					for (var i = 0; i < dataset.length; i++) {
+						var delLink = '<tr>'
+							+ '<td><div class="custom-control custom-checkbox">'
+							+ '<input type="checkbox" class="custom-control-input" id="linkedid_' + i + '" type="checkbox">'
+							+ '<label class="custom-control-label" for="linkedid_' + i + '"></label>'
+							+ '</div></td>'
+							+ '<td><a href="#" id="linkeddel_' + i + '">' + dataset[i].fields.key_link + '</a></td>'
+							+ '</tr>'
 
-							$('#GuestLinkDel').find('tbody').append(delLink);
+						$('#GuestLinkDel').find('tbody').append(delLink);
+					}
+					$('#GuestLinkDel').DataTable();
+
+					$("#delLinkFromDir").click(function (e) {
+						e.preventDefault();
+						success = 0, failed = 0;
+						var total_checked = $('#GuestLinkDel').find('input[type="checkbox"]:checked').length;
+
+						if (total_checked && searchFoundDir != "") {
+							for (var i = 0; i < total_checked; i++) {
+								var number = $('#GuestLinkDel').find('input[type="checkbox"]:checked')[i].id.split('_').pop();
+								var src = $('#linkeddel_' + number).text();
+
+								if ($("#searchdir").val()) {
+									delLinkToDirectoy(src);
+								}
+							}
 						}
-						$('#GuestLinkDel').DataTable();
 
-						$("#delLinkFromDir").click(function (e) {
-						 e.preventDefault();				
-						 success =0,failed=0;		
-						 var total_checked = $('#GuestLinkDel').find('input[type="checkbox"]:checked').length;
-						 if( total_checked && searchFoundDir != "" ){
-							 	for( var i=0; i<total_checked; i++ ){
-								 	var number = $('#GuestLinkDel').find('input[type="checkbox"]:checked')[i].id.split('_').pop();
-								 	// $('#GuestLink').find('input[type="checkbox"]:checked')
-								 	// console.log(number)
-								 	var src = $('#linkeddel_'+number).text();
-								 	// console.log(src)
-								 		if($("#searchdir").val() ) {	
-											delLinkToDirectoy(src);
-										}
-							 	}
-						 }
-						 else{
+						else {
 							alert("First select a Directory");
 						}
-
-						});
-
-					},
+					});
+				},
 			})
 		}
-
 
 
 		$("#search").click(function (e) {
 			e.preventDefault();
 			genDirLink();
-			
+
 		})
 
 
@@ -381,12 +370,10 @@
 			e.preventDefault();
 			genDirLink();
 		})
-		
-
-
 	});
 
 </script>
+
 {% endblock %}
 
 </html>

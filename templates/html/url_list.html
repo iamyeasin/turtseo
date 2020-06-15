@@ -51,9 +51,9 @@
 
 {% block script %}
 <script>
-
+    
+    //Show all matching url list with searched key_link and other any key_link in a new window
     $(document).ready(function (e) {
-
         function setCookie(cname, cvalue, exdays) {
             var d = new Date();
             d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -82,29 +82,34 @@
 
         console.log(key, compare);
 
+        // send hit for matching url list
         $.ajax({
             type: 'POST',
-            url: '/url_list', // A new url in django
+            url: '/url_list',
             data: {
                 'key_data': getCookie("key_data"),
                 'compare_data': getCookie("compare_data"),
             },
             success: function (data) {
                 var parseData = JSON.parse(data);
+
                 for (var i = 0; i < parseData.url.length; i++) {
                     if (parseData.isKey[i] == 1) {
                         var str = '<tr>' + "<td><b><span style=" + '"color:#46E956;"' + ">" + parseData.url[i] + "</span></b></td>" + '</tr>'
                         $('#list').append(str);
                     }
+
                     else {
                         var str = '<tr>' + "<td>" + parseData.url[i] + "</td>" + '</tr>'
                         $('#all_url').append(str);
                     }
-                }            
+                }   
+
                 setCookie('key_data', "", 1);
                 setCookie('compare_data', "", 1);
-                $('#all_url').DataTable();
+                $('#all_url').DataTable();            
             },
+
             error: function (req, status, err) {
                 alert("Didn't found any match");
             },
@@ -112,6 +117,7 @@
     });
 
 </script>
+
 {% endblock %}
 
 </html>
