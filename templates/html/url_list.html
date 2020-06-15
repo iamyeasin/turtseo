@@ -45,6 +45,17 @@
                     <tbody></tbody>
                 </table>
             </div>
+            <div class="container col-sm-4">
+                <h4>Previously Inserted</h4>
+                <table id="list" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>               
+                          <th class="th-sm">URLS</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
     </form>
 </body>
@@ -107,7 +118,8 @@
 
                 setCookie('key_data', "", 1);
                 setCookie('compare_data', "", 1);
-                $('#all_url').DataTable();            
+                $('#all_url').DataTable();    
+                $('#list').DataTable();           
             },
 
             error: function (req, status, err) {

@@ -114,7 +114,7 @@
 				<label for="" class="col-sm-2 col-form-label">Email </label>
 				<div class="col-sm-8">
 					<input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" class="form-control" id="email"
-						value="" required placeholder="emample@emample.com">
+						value="" required placeholder="example@example.com">
 				</div>
 			</div>
 			<div class="col-sm-2">
@@ -123,6 +123,10 @@
 		</div>
 	</form>
 
+	<div class="container pt-5">
+		<h3 id="loadingmessage">Wait...Data Saving is in progress. Do not refresh the page</h3>
+	</div>
+
 </body>
 {% block script %}
 <script src="{% static 'PapaParse/papaparse.min.js' %}"></script>
@@ -130,6 +134,8 @@
 
 	$(document).ready(function (e) {
 		var parseData = [];
+		$('#loadingmessage').hide();
+
 
 		//upload a file
 		$("#file").change(function (e) {
@@ -200,7 +206,13 @@
 					}
 				}
 
-				// send hit for save input data
+				// show message to save data and disable the button for multiple hits
+				$('#loadingmessage').show();
+				var input = this;
+        		input.disabled = true;
+
+
+        		// send hit for save input data
 				$.ajax({
 					type: 'POST',
 					url: '',
@@ -219,10 +231,14 @@
 					},
 					success: function (gotIt, status) {
 						$('#form')[0].reset();
+						$('#loadingmessage').hide();
 						alert("Data Saved");
+						input.disabled = false;
 					},
 					error: function () {
 						alert("Duplicate Key Link exists");
+						$('#loadingmessage').hide();
+						input.disabled = false;
 					}
 				})
 			}
