@@ -258,3 +258,39 @@ def Directory(request):
 				
 	else:
 		return render(request, 'html/directory.html')
+
+@csrf_exempt
+def Directory_List(request):
+
+	if request.method == "POST":
+		btnpressed = request.POST.get('btnpressed')
+
+		if btnpressed == "load_all_directory":
+
+			try:
+				directory_name_model = DirectoryName.objects.all();
+			except:
+				directory_name_model = None
+			
+			if directory_name_model != None:
+				serialized = serializers.serialize('json', directory_name_model)
+				data = {"dataset": serialized}
+
+				return JsonResponse(data, safe=False)
+
+			else:
+				return HttpResponseNotFound("No data found")
+
+		elif(btnpressed == "delete_directory"):
+			try:
+				dirname = request.POST.get('dirname').strip()
+				dirname = dirname.lower()
+
+				DirectoryName.objects.filter(directory_name=dirname).delete()
+
+				return HttpResponse("Delete Completed")
+
+			except:
+				return HttpResponse("Delete Operation couldn't Complete")
+
+	return render(request, 'html/directory_list.html')
